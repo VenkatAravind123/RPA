@@ -62,7 +62,7 @@ export default function NavBar() {
       <nav className="navbar">
         <div className="nav-container">
           <div className='left-section'>
-          {isLoggedIn && userRole === 'Admin' && (
+          {isLoggedIn && (userRole === 'Admin'|| userRole === 'Manager') && (
               <Link to="/admin" className='dashboard-icon'>
                 <RiAdminLine size={24} />
               </Link>

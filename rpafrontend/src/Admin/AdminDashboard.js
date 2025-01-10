@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import SideBar from './SideBar';
 import Activity from './Activity';
 import Engagement from './Engagement';
@@ -10,8 +10,42 @@ import UserInfo from './UserInfo';
 
 import { FaUsers, FaCalendarAlt, FaChartLine } from 'react-icons/fa';
 import Manage from './Manage';
+import { useAuth } from '../AuthContext';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
+const cookies = new Cookies();
+export default function AdminDashboard() 
+{
+   const { isLoggedIn, logout, userRole } = useAuth();
+   const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [name, setName] = useState('');
 
-export default function AdminDashboard() {
+  const navigate = useNavigate();
+   useEffect(() => {
+    const fetchProtectedData = async () => {
+      const token = cookies.get('token');
+      if (!token) {
+        return;
+      }
+
+      try {
+        const response = await axios.get('http://localhost:2021/protected', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setData(response.data);
+        setName(response.data.name);
+      } catch (error) {
+        setError('Error fetching protected data');
+        console.error(error);
+      }
+    };
+
+    fetchProtectedData();
+  }, [navigate]);
+
   const dashboardStyle = {
     padding: "2rem",
     color: "#fff",
@@ -60,7 +94,7 @@ export default function AdminDashboard() {
             <div style={dashboardStyle}>
               <div style={heroStyle}>
                 <h1 style={{ color: "#e0d074", marginBottom: "1rem" }}>
-                  Welcome to Admin Dashboard
+                  Welcome to {userRole} Dashboard
                 </h1>
                 <p style={{ color: "rgba(255, 255, 255, 0.8)" }}>
                   Manage your activities, users, and engagement all in one place
