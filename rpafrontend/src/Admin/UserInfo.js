@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { toast, ToastContainer } from 'react-toastify';
+import config from '../config'
 import 'react-toastify/dist/ReactToastify.css';
 
 const cookies = new Cookies();
@@ -46,7 +47,7 @@ export default function UserInfo() {
           return;
         }
 
-        const response = await axios.get(`http://localhost:2021/user/viewuserbyid/${id}`, {
+        const response = await axios.get(`${config.url}/user/viewuserbyid/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

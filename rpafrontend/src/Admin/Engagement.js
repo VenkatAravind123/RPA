@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { IoEye } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import config from '../config'
 import { toast } from 'react-toastify';
 import { IoDownloadOutline } from "react-icons/io5";
 const cookies = new Cookies();
@@ -173,7 +174,7 @@ export default function Engagement() {
     const fetchUsers = async () => {
       try {
         const token = cookies.get('token');
-        const response = await axios.get('http://localhost:2021/user/getallusers', {
+        const response = await axios.get(`${config.url}/user/getallusers`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUsers(response.data);
@@ -199,7 +200,7 @@ export default function Engagement() {
         const activityData = {};
         for (const activityId of uniqueActivityIds) {
           const response = await axios.get(
-            `http://localhost:2021/user/getallactivities`,
+            `${config.url}/user/getallactivities`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           const activities = response.data.data;

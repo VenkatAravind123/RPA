@@ -3,8 +3,10 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import config from '../config'
 import { MdDelete } from "react-icons/md";
 const cookies = new Cookies();
+
 
 export default function Activity() {
   const [activities, setActivities] = useState([]);
@@ -163,7 +165,7 @@ export default function Activity() {
   const fetchActivities = async () => {
     try {
       const token = cookies.get('token');
-      const response = await axios.get('http://localhost:2021/user/getallactivities', {
+      const response = await axios.get(`${config.url}/user/getallactivities`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -196,7 +198,7 @@ useEffect(() => {
     e.preventDefault();
     try {
       const token = cookies.get('token');
-      await axios.post('http://localhost:2021/user/addactivity', formData, {
+      await axios.post(`${config.url}/user/addactivity`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Activity added successfully!');
@@ -227,7 +229,7 @@ useEffect(() => {
       }
 
       // Updated API endpoint path
-      const response = await axios.delete(`http://localhost:2021/user/deleteactivity/${_id}`, {
+      const response = await axios.delete(`${config.url}/user/deleteactivity/${_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

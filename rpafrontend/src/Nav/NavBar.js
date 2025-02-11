@@ -8,7 +8,7 @@ import Login from './Login';
 import './nav.css'
 import { useAuth } from '../AuthContext';
 import Register from './Register';
-import rpa from '../images/rpa3.png';
+import rpa from '../images/rpanew.png';
 import AdminDashboard from '../Admin/AdminDashboard';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
@@ -18,6 +18,8 @@ import { HiOutlineLogout } from "react-icons/hi";
 import { RxDashboard } from "react-icons/rx";
 import { RiAdminLine } from "react-icons/ri";
 import Team from './Team';
+import config from '../config'
+import Profile from './Profile';
 const cookies = new Cookies();
 
 export default function NavBar() {
@@ -41,7 +43,7 @@ export default function NavBar() {
       }
 
       try {
-        const response = await axios.get('http://localhost:2021/protected', {
+        const response = await axios.get(`${config.url}/protected`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -108,6 +110,7 @@ export default function NavBar() {
             <Route path="/register" element={<Register />} />
             <Route path="/admin/*" element={<AdminDashboard />} />
             <Route path="/team" element={<Team/>}/>
+            <Route path="/profile" element={<Profile/>}/>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

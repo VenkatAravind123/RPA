@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import config from '../config'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -74,7 +75,7 @@ export default function Manage() {
   const fetchUsers = async () => {
     try {
       const token = cookies.get('token');
-      const response = await axios.get('http://localhost:2021/user/getallusers', {
+      const response = await axios.get(`${config.url}/user/getallusers`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(response.data);
@@ -91,7 +92,8 @@ export default function Manage() {
     try {
       setUpdatingUserId(userId);
       const token = cookies.get('token');
-      const response = await axios.put(`http://localhost:2021/user/updaterole/${userId}`,
+      console.log(userId)
+      const response = await axios.put(`${config.url}/user/updaterole/${userId}`,
         { role: newRole },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -7,7 +7,7 @@ import Users from './Users';
 import NotFound from '../Nav/NotFound';
 import Home from '../Nav/Home';
 import UserInfo from './UserInfo';
-
+import config from '../config'
 import { FaUsers, FaCalendarAlt, FaChartLine } from 'react-icons/fa';
 import Manage from './Manage';
 import { useAuth } from '../AuthContext';
@@ -30,7 +30,7 @@ export default function AdminDashboard()
       }
 
       try {
-        const response = await axios.get('http://localhost:2021/protected', {
+        const response = await axios.get(`${config.url}/protected`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

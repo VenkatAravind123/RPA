@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaHome, FaLock, FaMoneyBill, FaUser } from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
 import { BiAnalyse, BiSearch } from "react-icons/bi";
@@ -12,6 +12,11 @@ import { AiFillProduct } from "react-icons/ai";
 import { MdManageAccounts } from "react-icons/md";
 import SidebarMenu from "./SideBarMenu";
 import './SideBar.css'
+import { useAuth } from '../AuthContext';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
+import config from '../config';
+const cookies = new Cookies();
 const routes = [
   {
     path: "/admin/activity",
@@ -40,8 +45,36 @@ const routes = [
   }
 ]
 const SideBar = ({ children }) => {
+const { isLoggedIn, logout, userRole } = useAuth();
+   const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [name, setName] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchProtectedData = async () => {
+      const token = cookies.get('token');
+      if (!token) {
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${config.url}/protected`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setData(response.data);
+        setName(response.data.name);
+      } catch (error) {
+        setError('Error fetching protected data');
+        console.error(error);
+      }
+    };
+
+    fetchProtectedData();
+  }, [navigate]);
   const inputAnimation = {
     hidden: {
       width: 0,

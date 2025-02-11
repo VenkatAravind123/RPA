@@ -182,4 +182,53 @@ const updateRole = async (request,response) => {
     }
 }
 
-module.exports = {register,login,getAllUsers,getallActivities,viewUserById,registerForActivity,updateRole}
+const viewRegisteredActivities = async (request, response) => {
+    try {
+        // Get user ID from auth token
+        const userId = request.user.id;
+
+        // Find user and populate registered activities
+        const userData = await user.findById(userId)
+            .populate({
+                path: 'registeredActivities',
+                populate: {
+                    path: 'activity',
+                    model: 'Activity',
+                    select: 'name description venue date price image'
+                }
+            });
+
+        if (!userData) {
+            return response.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        // Check if user has registered activities
+        if (!userData.registeredActivities || userData.registeredActivities.length === 0) {
+            return response.status(200).json({
+                success: true,
+                data: [],
+                message: "No registered activities found"
+            });
+        }
+
+        return response.status(200).json({
+            success: true,
+            data: userData.registeredActivities,
+            message: "Registered activities retrieved successfully"
+        });
+    } catch (error) {
+        console.error("Error in viewRegisteredActivities:", error);
+        return response.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error.message
+        });
+    }
+};
+
+
+
+module.exports = {register,login,getAllUsers,getallActivities,viewUserById,registerForActivity,updateRole,viewRegisteredActivities}

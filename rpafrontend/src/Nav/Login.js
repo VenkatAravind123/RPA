@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './navlogin.css';
 import rpa from '../images/rpa3.png';
 import axios from 'axios';
+import config from '../config'
 import { useAuth } from '../AuthContext';
 
 export default function Login() {
@@ -35,7 +36,7 @@ export default function Login() {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:2021/user/login', {
+      const response = await axios.post(`${config.url}/user/login`, {
         email: formData.email,
         password: formData.password
       });

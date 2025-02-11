@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 import { IoEye } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import config from '../config'
 import { IoDownloadOutline } from "react-icons/io5";
 const cookies = new Cookies();
 
@@ -136,7 +137,7 @@ export default function Users() {
     const fetchUsers = async () => {
       try {
         const token = cookies.get('token');
-        const response = await axios.get('http://localhost:2021/user/getallusers', {
+        const response = await axios.get(`${config.url}/user/getallusers`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUsers(response.data);

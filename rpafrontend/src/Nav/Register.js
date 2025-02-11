@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './navRegister.css';
+import config from '../config'
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const RegisterForm = () => {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:2021/user/register', formData);
+      await axios.post(`${config.url}/user/register`, formData);
       navigate('/login');
     } catch (error) {
       setError(error.response?.data || 'Registration failed');
