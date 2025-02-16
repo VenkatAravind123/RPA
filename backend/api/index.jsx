@@ -8,7 +8,7 @@ const app = express()
 app.use(express.json())
 
 app.use(cors({
-  origin: 'http://localhost:3000', // Replace with your frontend URL
+  origin: 'https://rpa-club-two.vercel.app', // Replace with your frontend URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
