@@ -7,11 +7,12 @@ require("dotenv").config()
 const app = express()
 app.use(express.json())
 
-app.use(cors({
-  origin: 'https://rpa-club-two.vercel.app', // Replace with your frontend URL
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: 'https://rpa-club-two.vercel.app', // Replace with your frontend URL
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   credentials: true,
+// }));
+app.use(cors())
 
 
 
@@ -21,6 +22,12 @@ mongoose.connect(dburl).then(() => {
 }).catch((err) => {
     console.log(err)
 })
+
+app.get("/", (req, res) => {
+  res.send(
+    "Welcome to the RPA Club API. Please refer to the documentation for more information."
+  );
+});
 
 
 app.use("/user", userRoutes)

@@ -1,13 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.jsx",
+  "main": "api/index.js",
   "engines": {
     "node": "18.x"
   },
   "scripts": {
-    "start": "node api/index.jsx",
-    "dev": "nodemon api/index.jsx"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
