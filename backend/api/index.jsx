@@ -1,8 +1,8 @@
 const mongoose = require("mongoose")
 const express = require("express")
 const cors = require("cors")
-const userRoutes = require("./Routes/UserRoutes.jsx")
-const auth = require("./auth.jsx")
+const userRoutes = require("../Routes/UserRoutes.jsx")
+const auth = require("../auth.jsx")
 require("dotenv").config()
 const app = express()
 app.use(express.json())
@@ -32,10 +32,10 @@ app.get("/protected", auth(['Admin', 'User', 'Manager']), (req, res) => {
     email: req.user.email,
     role: req.user.role,
     name: req.user.name,
-    id: req.user._id,
+    _id: req.user._id,
     // other user data
   };
-  console.log(user.name)
+  console.log(user.email)
   res.json(user);
 });
 

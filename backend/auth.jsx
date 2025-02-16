@@ -1,23 +1,23 @@
 const jwt = require('jsonwebtoken');
+const User = require('./models/User.jsx'); // Adjust the path to your User model
 
-const auth = (roles = []) => {
-  if (typeof roles === 'string') {
-    roles = [roles];
-  }
-
-  return (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).send('Access denied');
-
+const auth = (roles) => {
+  return async (req, res, next) => {
     try {
+      const token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-      if (roles.length && !roles.includes(decoded.role)) {
-        return res.status(403).send('Forbidden');
+      const user = await User.findById(decoded.userId).select('-password');
+      if (!user) {
+        return res.status(404).send('User not found');
       }
-      req.user = decoded;
+      if (!roles.includes(user.role)) {
+        return res.status(403).send('Access denied');
+      }
+      req.user = user;
       next();
     } catch (error) {
-      res.status(400).send('Invalid token');
+      console.error(error);
+      res.status(401).send('Unauthorized');
     }
   };
 };

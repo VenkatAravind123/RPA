@@ -35,6 +35,10 @@ export default function NavBar() {
     navigate('/login');
   };
 
+  const profile = () =>{
+
+    navigate('/profile',{state:{email: data.email}});
+  }
   useEffect(() => {
     const fetchProtectedData = async () => {
       const token = cookies.get('token');
@@ -50,6 +54,7 @@ export default function NavBar() {
         });
         setData(response.data);
         setName(response.data.name);
+        // console.log(response.data)
       } catch (error) {
         setError('Error fetching protected data');
         console.error(error);
@@ -83,7 +88,7 @@ export default function NavBar() {
             <Link to="/team" className="nav-item">Team</Link>
            
             {isLoggedIn && data ? (
-              <p style={{color:"white",padding:"10px"}}><FaRegUser />{name}</p>
+              <p style={{color:"white",padding:"10px",cursor:"pointer"}} onClick={profile}><FaRegUser />{name}</p>
             ) : (
               isLoggedIn && <p>Loading...</p>
             )}

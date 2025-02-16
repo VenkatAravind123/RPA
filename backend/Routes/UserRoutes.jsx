@@ -16,8 +16,10 @@ response.get("/getactivities",auth(['User','Admin','Manager']),userroutes.getall
 response.get("/get",userroutes.getallActivities)
 response.get("/registeredactivities/:userId",auth(['Admin','Manager','User']),userroutes.viewRegisteredActivities)
 response.delete("/deleteactivity/:id",auth(['Admin']),deleteActivity);
-response.get("/viewuserbyid/:id",auth(['Admin','Manager']),userroutes.viewUserById);
+response.get("/viewuserbyid/:id", auth(['Admin', 'Manager', 'User']), userroutes.viewUserById);
 response.post("/registeractivity/:activityId",auth(['User','Admin','Manager']),userroutes.registerForActivity);
 response.put("/updaterole/:id",auth(['Admin','Manager']),userroutes.updateRole);
+response.get("/user/viewuserbyemail/:email",auth(['Admin','Manager','User']),userroutes.viewUserByEmail);
+response.post("/send-email",userroutes.sendEmail);
 
 module.exports = response;

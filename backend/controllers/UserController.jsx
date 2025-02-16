@@ -3,6 +3,7 @@ const activity = require("../models/Activity.jsx")
 const bcrypt = require("bcrypt");
 const salt = bcrypt.genSaltSync(10);
 const jwt = require("jsonwebtoken");
+const nodemailer = require('nodemailer');
  
 // Register a new user
 const register = async(request,response)=>{
@@ -92,22 +93,60 @@ const getallActivities = async (request, response) => {
     }
 };
 
-const viewUserById = (request,response) =>{
-    try{
+// const viewUserById = (request,response) =>{
+//     try{
+//         const id = request.params.id;
+//         console.log(id);
+//         const user1 = user.findById(id);
+//         if(!user1){
+//             return response.status(404).send("User not found");
+//         }
+//         response.status(200).json(user1);
+//     }
+//     catch(error){
+//         console.error(error);
+//         response.status(500).send("Internal Server Error");
+//     }
+// }
+const viewUserById = async (request, response) => {
+    try {
         const id = request.params.id;
-        console.log(id);
-        const user1 = user.findById(id);
-        if(!user1){
+        //console.log('Fetching user with ID:', id);
+        
+        const user1 = await user.findById(id);
+        if (!user1) {
+            return response.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+        
+        //console.log('Found user:', user1);
+        return response.status(200).json(user1);
+    } catch (error) {
+        console.error('Error in viewUserById:', error);
+        return response.status(500).json({
+            success: false,
+            message: "Error fetching user",
+            error: error.message
+        });
+    }
+};
+
+const viewUserByEmail = async (request, response) => {
+    try {
+        const email = request.params.email;
+        console.log(email);
+        const user1 = await user.findOne({ email: email });
+        if (!user1) {
             return response.status(404).send("User not found");
         }
         response.status(200).json(user1);
-    }
-    catch(error){
+    } catch (error) {
         console.error(error);
         response.status(500).send("Internal Server Error");
     }
-}
-
+};
 
 const registerForActivity = async(request, response) => {
     try {
@@ -229,6 +268,37 @@ const viewRegisteredActivities = async (request, response) => {
     }
 };
 
+const sendEmail = async (req, res) => {
+    try {
+        const { name, email, message } = req.body;
 
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
 
-module.exports = {register,login,getAllUsers,getallActivities,viewUserById,registerForActivity,updateRole,viewRegisteredActivities}
+        const mailOptions = {
+            from: email,
+            to: process.env.EMAIL_USER,
+            subject: `New Contact Form Message from ${name}`,
+            html: `
+                <h3>New Contact Form Submission</h3>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Message:</strong></p>
+                <p>${message}</p>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ success: true, message: 'Email sent successfully' });
+    } catch (error) {
+        console.error('Email error:', error);
+        res.status(500).json({ success: false, message: 'Failed to send email' });
+    }
+};
+
+module.exports = {register,login,getAllUsers,getallActivities,viewUserById,registerForActivity,updateRole,viewRegisteredActivities,sendEmail,viewUserByEmail}
