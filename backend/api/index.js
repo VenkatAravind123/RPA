@@ -31,9 +31,6 @@ app.get("/", (req, res) => {
 
 
 app.use("/user", userRoutes)
-// app.get("/protected",auth(['Admin','User','Manager']),(request,response)=>{
-//     response.send("You have access to this resource")
-// })
 app.get("/protected", auth(['Admin', 'User', 'Manager']), (req, res) => {
   const user = {
     email: req.user.email,
