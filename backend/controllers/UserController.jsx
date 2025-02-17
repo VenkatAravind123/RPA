@@ -1,7 +1,7 @@
 const user = require("../models/User.jsx");
 const activity = require("../models/Activity.jsx")
-const bcrypt = require("bcrypt");
-const salt = bcrypt.genSaltSync(10);
+const bcrypt = require("bcryptjs");
+
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
  

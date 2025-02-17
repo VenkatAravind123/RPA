@@ -7,10 +7,11 @@
     "server": "nodemon api/index.js"
   },
   "keywords": [],
-  "author":"",
-  "license":"ISC",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
