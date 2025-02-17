@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import config from './config';
 
 const cookies = new Cookies();
 const AuthContext = createContext(null);
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
             const token = cookies.get('token');
             if (token) {
                 try {
-                    const response = await axios.get('http://localhost:2021/protected', {
+                    const response = await axios.get(`${config.url}/protected`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
@@ -51,7 +52,7 @@ export const AuthProvider = ({ children }) => {
         const token = cookies.get('token');
         if (token) {
           try {
-            const response = await axios.get('http://localhost:2021/protected', {
+            const response = await axios.get(`${config.url}/protected`, {
               headers: {
                 Authorization: `Bearer ${token}`
               }
