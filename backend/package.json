@@ -1,14 +1,14 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "description": "",
   "main": "api/index.js",
-  "engines": {
-    "node": "22.x"
-  },
   "scripts": {
-    "start": "node api/index.js",
-    "dev": "nodemon api/index.js"
+    "start": "nodemon api/index.js"
   },
+  "keywords": [],
+  "author":"",
+  "license":"ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
