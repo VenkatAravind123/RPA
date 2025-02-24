@@ -101,17 +101,13 @@ export default function About() {
         <div className='footer-content'>
           <h3>Connect With Us</h3>
           <div className='social-links'>
-            <a href="https://www.linkedin.com/company/rpa-club-klef/" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/in/rpa-tech-club-1a5598244/" target="_blank" rel="noopener noreferrer">
               <FaLinkedin className="social-icon" />
               <span>LinkedIn</span>
             </a>
-            <a href="https://www.instagram.com/rpa_klef/" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.instagram.com/rpa.klef/" target="_blank" rel="noopener noreferrer">
               <FaInstagram className="social-icon" />
               <span>Instagram</span>
-            </a>
-            <a href="https://github.com/rpaklef" target="_blank" rel="noopener noreferrer">
-              <FaGithub className="social-icon" />
-              <span>GitHub</span>
             </a>
             <a href="mailto:rpaclub@kluniversity.in">
               <FaEnvelope className="social-icon" />

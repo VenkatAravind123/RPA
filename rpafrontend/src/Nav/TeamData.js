@@ -56,7 +56,7 @@ const team = [
     },
   },
   {
-    name: "Pranay",
+    name: "N.Pranay Vardhan ",
     role: "Vice President",
     bio: "Pranay is a motivated junior core team member, eager to learn and contribute to our projects.",
     image: pranay,
@@ -269,7 +269,7 @@ const team = [
   
   {
     name: "Leethika",
-    role: "Drafting",
+    role: "Designing",
     bio: "Leethika is a motivated member of the junior core team, dedicated to achieving project goals.",
     image: leethika,
     social: {
