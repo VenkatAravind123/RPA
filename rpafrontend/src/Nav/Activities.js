@@ -40,9 +40,12 @@ export default function Activities() {
 
   const imageStyle = {
     width: "100%",
-    height: "300px",
-    objectFit: "cover",
-    marginBottom: "1rem"
+    height: "200px", // Reduced from 300px
+    objectFit: "contain", // Changed from 'cover' to 'contain'
+    marginBottom: "1rem",
+    background: "rgba(0, 0, 0, 0.2)", // Optional: adds a subtle background
+    borderRadius: "8px", // Optional: adds rounded corners
+    padding: "10px"
   };
 
   const registerButtonStyle = {
