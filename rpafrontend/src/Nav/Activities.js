@@ -22,6 +22,13 @@ export default function Activities() {
     gap: "2rem"
   };
 
+  const imageContainerStyle = {
+    width: "100%",
+    height: "250px",
+    borderRadius: "8px",
+    overflow: "hidden",
+    position: "relative"
+  };
   const gridStyle = {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
@@ -32,20 +39,24 @@ export default function Activities() {
     background: "rgba(255, 255, 255, 0.1)",
     backdropFilter: "blur(10px)",
     borderRadius: "15px",
-    padding: "1.5rem",
+    padding: "1rem",
     border: "1px solid rgba(255, 255, 255, 0.2)",
     transition: "transform 0.3s ease",
-    color: "#fff"
+    color: "#fff",
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+    height: "auto",
+    minHeight: "450px"
   };
 
   const imageStyle = {
     width: "100%",
-    height: "200px", // Reduced from 300px
-    objectFit: "contain", // Changed from 'cover' to 'contain'
-    marginBottom: "1rem",
-    background: "rgba(0, 0, 0, 0.2)", // Optional: adds a subtle background
-    borderRadius: "8px", // Optional: adds rounded corners
-    padding: "10px"
+    height: "140%",
+    objectFit: "cover",
+    position: "absolute",
+    top: "0",
+    left: "0"
   };
 
   const registerButtonStyle = {
@@ -69,6 +80,7 @@ export default function Activities() {
     marginBottom: "1rem"
   };
 
+  
   const fetchActivities = async () => {
     try {
       const token = cookies.get('token');
@@ -167,23 +179,41 @@ export default function Activities() {
         {displayedActivities.length > 0 ? (
           displayedActivities.map((activity) => (
             <div 
-              key={activity._id} 
-              style={cardStyle}
-              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-              onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              <img 
-                src={activity.image} 
-                alt={activity.name} 
-                style={imageStyle}
-              />
-              <h3 style={{ color: "#e0d074", marginBottom: "1rem" }}>{activity.name}</h3>
-              <p style={{ marginBottom: "0.5rem" }}>{activity.description}</p>
-              <p style={{ color: "#e0d074", marginBottom: "0.5rem" }}>
-                Venue: {activity.venue}
-              </p>
-              <p style={{ marginBottom: "0.5rem" }}>Price: ₹{activity.price}</p>
-              <p>Date: {new Date(activity.date).toLocaleDateString()}</p>
+  key={activity._id} 
+  style={cardStyle}
+  onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+  onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+>
+  <div style={imageContainerStyle}>
+    <img 
+      src={activity.image} 
+      alt={activity.name} 
+      style={imageStyle}
+      onError={(e) => e.target.style.display = 'none'}
+    />
+  </div>
+              <h3 style={{ color: "#e0d074", margin: "0.5rem 0" }}>{activity.name}</h3>
+              {activity.description && (
+                <p style={{ marginBottom: "0.5rem" }}>{activity.description}</p>
+              )}
+              {activity.venue && (
+                <p style={{ color: "#e0d074", marginBottom: "0.5rem" }}>
+                  Venue: {activity.venue}
+                </p>
+              )}
+              {activity.price !== undefined && activity.price !== null && (
+  <p style={{ marginBottom: "0.5rem" }}>
+    Price: ₹{(() => {
+      const price = Number(activity.price);
+      return isNaN(price) ? '0' : price.toLocaleString('en-IN');
+    })()}
+  </p>
+)}
+              {activity.date && (
+                <p style={{ marginBottom: "0.5rem" }}>
+                  Date: {new Date(activity.date).toLocaleDateString()}
+                </p>
+              )}
               {cookies.get('token') && (
                 <button
                   style={{
