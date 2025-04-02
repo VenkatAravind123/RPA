@@ -13,6 +13,18 @@ export default function Users() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  
+  // Add loading spinner style
+  const loadingSpinnerStyle = {
+    width: "50px",
+    aspectRatio: "1",
+    borderRadius: "50%",
+    background: "radial-gradient(farthest-side,#ffa516 94%,transparent) top/8px 8px no-repeat, conic-gradient(transparent 30%,#ffa516)",
+    WebkitMask: "radial-gradient(farthest-side,transparent calc(100% - 8px),#000 0)",
+    animation: "l13 1s infinite linear",
+    margin: "20px auto"
+  };
+
   const buttonStyle = {
     background: "linear-gradient(135deg, #e0d074 0%, #d4b93c 100%)",
     color: "#1a1a1a",
@@ -23,6 +35,8 @@ export default function Users() {
     fontSize: "15px",
     fontWeight: "bold"
   };
+  
+  // Other style objects...
   const tableHeaderContainerStyle = {
     display: "flex",
     justifyContent: "space-between",
@@ -34,6 +48,7 @@ export default function Users() {
     color: "#e0d074",
     margin: 0
   };
+  
   const downloadButtonStyle = {
     background: "linear-gradient(135deg, #4ecdc4 0%, #2ab1a3 100%)",
     color: "#1a1a1a",
@@ -52,45 +67,8 @@ export default function Users() {
 
   const iconStyle = {
     fontSize: "1.5rem"
-
   };
-  const handledownloadUsers =  ()=>{
-    try{
-      const headers = ['Name', 'Email', 'Phonenumber', 'Department', 'Role'];
-      const csvData = users.map(user =>[
-        user.name,
-        user.email,
-        user.phonenumber,
-        user.department,
-        user.role
-      ])
-
-      const csvContent = [
-        headers.join(','), ...csvData.map(r => r.join(','))
-      ].join('\n');
-
-
-      const blob = new Blob([csvContent],{type: 'text/csv'});
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'users.csv';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-
-      toast.success('Users downloaded successfully');
-
-    }
-
-    catch(error){
-      console.error(error.message);
-      toast.error('Error downloading users');
-    }
-  };
-
-
+  
   const containerStyle = {
     background: "rgba(255, 255, 255, 0.1)",
     backdropFilter: "blur(10px)",
@@ -110,8 +88,6 @@ export default function Users() {
     borderCollapse: "collapse",
     marginTop: "1rem"
   };
-  
-  // ...existing code...
 
   const thStyle = {
     padding: "1rem",
@@ -133,6 +109,22 @@ export default function Users() {
     textAlign: "center"
   };
 
+  // Add keyframe animation
+  useEffect(() => {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+      @keyframes l13 { 
+        100% { transform: rotate(1turn); }
+      }
+    `;
+    document.head.appendChild(styleSheet);
+    
+    // Clean up function to remove styles when component unmounts
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -150,47 +142,81 @@ export default function Users() {
     fetchUsers();
   }, []);
 
-
-
-
-  if (loading) return <div style={{...containerStyle, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Loading...</div>;
+  // Updated loading state with spinner
+  if (loading) {
+    return (
+      <div style={{
+        ...containerStyle, 
+        display: 'flex', 
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        alignItems: 'center'
+      }}>
+        <div style={loadingSpinnerStyle}></div>
+        <p style={{color: "#e0d074", marginTop: "20px", fontSize: "16px"}}>Loading users data...</p>
+      </div>
+    );
+  }
+  
   if (error) return <div style={{...containerStyle, color: '#ff6b6b'}}>Error: {error}</div>;
 
-  // const viewUser = async (id) =>{
-  //   try{
-  //     navigate(`/admin/users/${id}`);
-  //     window.location.reload();
+  // Rest of your component code...
+  const handledownloadUsers =  ()=>{
+    try{
+      const headers = ['Name', 'Email', 'Phonenumber', 'Department', 'Role'];
+      const csvData = users.map(user =>[
+        user.name,
+        user.email,
+        user.phonenumber,
+        user.department,
+        user.role
+      ])
 
-  //   }
-  //   catch(error){
-  //     console.error(error.message);
-  //   }
-  // }
+      const csvContent = [
+        headers.join(','), ...csvData.map(r => r.join(','))
+      ].join('\n');
+
+      const blob = new Blob([csvContent],{type: 'text/csv'});
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'users.csv';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success('Users downloaded successfully');
+    }
+    catch(error){
+      console.error(error.message);
+      toast.error('Error downloading users');
+    }
+  };
 
   return (
     <div style={containerStyle}>
-      
       <div style={tableHeaderContainerStyle}>
-      <h2 style={tableHeaderStyle}>Users Management</h2>
-      <button 
-        style={downloadButtonStyle}
-        onClick={handledownloadUsers}
-        onMouseOver={(e) => {
-          e.currentTarget.style.background = 'transparent';
-          e.currentTarget.style.borderColor = '#4ecdc4';
-          e.currentTarget.style.color = '#4ecdc4';
-          e.currentTarget.style.transform = 'translateY(-2px)';
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.style.background = 'linear-gradient(135deg, #4ecdc4 0%, #2ab1a3 100%)';
-          e.currentTarget.style.borderColor = 'transparent';
-          e.currentTarget.style.color = '#1a1a1a';
-          e.currentTarget.style.transform = 'translateY(0)';
-        }}
-      >
-        <IoDownloadOutline style={iconStyle} />
-      </button>
-    </div>
+        <h2 style={tableHeaderStyle}>Users Management</h2>
+        <button 
+          style={downloadButtonStyle}
+          onClick={handledownloadUsers}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.borderColor = '#4ecdc4';
+            e.currentTarget.style.color = '#4ecdc4';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'linear-gradient(135deg, #4ecdc4 0%, #2ab1a3 100%)';
+            e.currentTarget.style.borderColor = 'transparent';
+            e.currentTarget.style.color = '#1a1a1a';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+        >
+          <IoDownloadOutline style={iconStyle} />
+        </button>
+      </div>
       <table style={tableStyle}>
         <thead>
           <tr>

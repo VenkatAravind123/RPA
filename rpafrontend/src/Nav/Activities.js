@@ -104,14 +104,14 @@ export default function Activities() {
 
   return (
     <div className="activities-container">
-      {cookies.get('token') && (
+      {/* {cookies.get('token') && (
         <button 
           className="toggle-button"
           onClick={() => setShowRegistered(!showRegistered)}
         >
           {showRegistered ? 'Show All Activities' : 'Show My Registered Activities'}
         </button>
-      )}
+      )} */}
 
       <div className="activities-grid">
         {displayedActivities.length > 0 ? (
@@ -149,7 +149,7 @@ export default function Activities() {
                   Date: {new Date(activity.date).toLocaleDateString()}
                 </p>
               )}
-              {cookies.get('token') && (
+              {/* {cookies.get('token') && (
                 <button
                   className="register-button"
                   onClick={() => handleRegister(activity._id)}
@@ -161,7 +161,7 @@ export default function Activities() {
                       ? 'Registering...'
                       : 'Register Now'}
                 </button>
-              )}
+              )} */}
             </div>
           ))
         ) : (

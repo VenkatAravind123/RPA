@@ -187,6 +187,32 @@ export default function Engagement() {
     fetchUsers();
   }, []);
 
+  // Add this with your other style definitions
+const loadingSpinnerStyle = {
+  width: "50px",
+  aspectRatio: "1",
+  borderRadius: "50%",
+  background: "radial-gradient(farthest-side,#ffa516 94%,transparent) top/8px 8px no-repeat, conic-gradient(transparent 30%,#ffa516)",
+  WebkitMask: "radial-gradient(farthest-side,transparent calc(100% - 8px),#000 0)",
+  animation: "l13 1s infinite linear",
+  margin: "20px auto"
+};
+  // Add this useEffect for the animation keyframes
+useEffect(() => {
+  const styleSheet = document.createElement("style");
+  styleSheet.innerText = `
+    @keyframes l13 { 
+      100% { transform: rotate(1turn); }
+    }
+  `;
+  document.head.appendChild(styleSheet);
+  
+  // Clean up function to remove styles when component unmounts
+  return () => {
+    document.head.removeChild(styleSheet);
+  };
+}, []);
+
   useEffect(()=>{
     const fetchActivityNames = async () => {
       try {
@@ -222,10 +248,15 @@ export default function Engagement() {
 
 
 
-  if (loading) return <div style={{...containerStyle, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Loading...</div>;
-  if (error) return <div style={{...containerStyle, color: '#ff6b6b'}}>Error: {error}</div>;
+  // if (loading) return <div style={{...containerStyle, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Loading...</div>;
+  // if (error) return <div style={{...containerStyle, color: '#ff6b6b'}}>Error: {error}</div>;
 
-  
+  if (loading) return (
+    <div style={{...containerStyle, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+      <div style={loadingSpinnerStyle}></div>
+      <p style={{color: "#e0d074", marginTop: "15px", fontSize: "16px"}}>Loading activities data...</p>
+    </div>
+  );
 
   return (
     <div style={containerStyle}>

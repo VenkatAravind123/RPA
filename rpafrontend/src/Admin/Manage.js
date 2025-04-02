@@ -56,6 +56,7 @@ export default function Manage() {
     backgroundRepeat: "no-repeat"
   };
 
+
   const highlightStyle = {
     animation: "highlight 1s ease-in-out"
   };
@@ -70,6 +71,38 @@ export default function Manage() {
     `;
     document.head.appendChild(styleSheet);
     fetchUsers();
+  }, []);
+  const loadingstyle = {
+    width: "50px",
+    aspectRatio: "1",
+    borderRadius: "50%",
+    background: "radial-gradient(farthest-side,#ffa516 94%,transparent) top/8px 8px no-repeat, conic-gradient(transparent 30%,#ffa516)",
+    WebkitMask: "radial-gradient(farthest-side,transparent calc(100% - 8px),#000 0)",
+    animation: "l13 1s infinite linear",
+    margin: "100px auto"
+  };
+  
+  useEffect(() => {
+    // Add the existing animation for user highlight
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+      @keyframes highlight {
+        0% { background: rgba(224, 208, 116, 0.2); }
+        100% { background: transparent; }
+      }
+      
+      @keyframes l13 { 
+        100% { transform: rotate(1turn); }
+      }
+    `;
+    document.head.appendChild(styleSheet);
+    
+    fetchUsers();
+    
+    // Clean up the style element when component unmounts
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
   }, []);
 
   const fetchUsers = async () => {
@@ -136,7 +169,7 @@ export default function Manage() {
     }
   };
 
-  if (loading) return <div style={containerStyle}>Loading...</div>;
+  if (loading) return <div style={loadingstyle}></div>;
 
   return (
     <div style={containerStyle}>

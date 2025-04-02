@@ -37,6 +37,33 @@ export default function UserInfo() {
     background: "rgba(255, 255, 255, 0.05)",
     borderRadius: "8px"
   };
+  
+  // Add loading spinner style
+  const loadingSpinnerStyle = {
+    width: "50px",
+    aspectRatio: "1",
+    borderRadius: "50%",
+    background: "radial-gradient(farthest-side,#ffa516 94%,transparent) top/8px 8px no-repeat, conic-gradient(transparent 30%,#ffa516)",
+    WebkitMask: "radial-gradient(farthest-side,transparent calc(100% - 8px),#000 0)",
+    animation: "l13 1s infinite linear",
+    margin: "100px auto"
+  };
+  
+  // Add keyframes animation
+  useEffect(() => {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+      @keyframes l13 { 
+        100% { transform: rotate(1turn); }
+      }
+    `;
+    document.head.appendChild(styleSheet);
+    
+    // Clean up function to remove styles when component unmounts
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -68,8 +95,14 @@ export default function UserInfo() {
     fetchUserData();
   }, [id]);
 
+  // Updated loading state with spinner
   if (loading) {
-    return <div style={containerStyle}>Loading...</div>;
+    return (
+      <div style={{...containerStyle, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        <div style={loadingSpinnerStyle}></div>
+        <p style={{color: "#e0d074", marginTop: "20px", fontSize: "16px"}}>Loading user data...</p>
+      </div>
+    );
   }
 
   if (error) {

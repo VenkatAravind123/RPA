@@ -1,26 +1,95 @@
-.dashboard-layout {
-    display: flex;
-    min-height: 100vh;
-    background: rgba(26, 26, 26, 0.9);
+/* Admin dashboard main styles */
+.admin-dashboard {
+  padding: clamp(1rem, 3vw, 2rem);
+  color: #fff;
+  width: 100%;
+}
+
+.admin-hero {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.admin-hero h1 {
+  color: #e0d074;
+  margin-bottom: 1rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.admin-hero p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(1rem, 2vw, 1.1rem);
+}
+
+.admin-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  margin-top: clamp(1.5rem, 4vw, 2rem);
+}
+
+.admin-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: clamp(1.2rem, 3vw, 1.5rem);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.admin-card-icon {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  color: #e0d074;
+}
+
+.admin-card h3 {
+  color: #e0d074;
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+}
+
+.admin-card p {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .admin-cards-container {
+    grid-template-columns: 1fr;
   }
   
-  .dashboard-content {
-    flex: 1;
-    padding: 2rem;
-    margin: 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 10px;
-    color: white;
+  .admin-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-dashboard {
+    padding: 0.8rem;
   }
   
-  @media (max-width: 768px) {
-    .dashboard-layout {
-      flex-direction: column;
-    }
-    
-    .dashboard-content {
-      margin: 0.5rem;
-      padding: 1rem;
-    }
+  .admin-hero {
+    padding: 1.2rem;
   }
+  
+  .admin-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.8rem;
+  }
+}

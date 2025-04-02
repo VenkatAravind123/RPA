@@ -13,16 +13,19 @@ import Manage from './Manage';
 import { useAuth } from '../AuthContext';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import './AdminDashboard.css';
+
 const cookies = new Cookies();
-export default function AdminDashboard() 
-{
-   const { isLoggedIn, logout, userRole } = useAuth();
-   const [data, setData] = useState(null);
+
+export default function AdminDashboard() {
+  const { isLoggedIn, logout, userRole } = useAuth();
+  const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [name, setName] = useState('');
 
   const navigate = useNavigate();
-   useEffect(() => {
+  
+  useEffect(() => {
     const fetchProtectedData = async () => {
       const token = cookies.get('token');
       if (!token) {
@@ -46,94 +49,38 @@ export default function AdminDashboard()
     fetchProtectedData();
   }, [navigate]);
 
-  const dashboardStyle = {
-    padding: "2rem",
-    color: "#fff",
-    width:"210%"
-  };
-
-  const heroStyle = {
-    background: "rgba(255, 255, 255, 0.1)",
-    backdropFilter: "blur(10px)",
-    borderRadius: "15px",
-    padding: "2rem",
-    marginBottom: "2rem",
-    textAlign: "center",
-    border: "1px solid rgba(255, 255, 255, 0.2)"
-  };
-
-  const cardsContainerStyle = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-    gap: "2rem",
-    marginTop: "2rem"
-  };
-
-  const cardStyle = {
-    background: "rgba(255, 255, 255, 0.05)",
-    borderRadius: "10px",
-    padding: "1.5rem",
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
-    transition: "transform 0.3s ease",
-    cursor: "pointer",
-    border: "1px solid rgba(255, 255, 255, 0.1)"
-  };
-
-  const iconStyle = {
-    fontSize: "2.5rem",
-    color: "#e0d074"
-  };
-
   return (
     <div>
       <SideBar>
         <Routes>
           <Route path="/" element={
-            <div style={dashboardStyle}>
-              <div style={heroStyle}>
-                <h1 style={{ color: "#e0d074", marginBottom: "1rem" }}>
-                  Welcome to {userRole} Dashboard
-                </h1>
-                <p style={{ color: "rgba(255, 255, 255, 0.8)" }}>
-                  Manage your activities, users, and engagement all in one place
-                </p>
+            <div className="admin-dashboard">
+              <div className="admin-hero">
+                <h1>Welcome to {userRole} Dashboard</h1>
+                <p>Manage your activities, users, and engagement all in one place</p>
               </div>
 
-              <div style={cardsContainerStyle}>
-                <div 
-                  style={cardStyle}
-                  onMouseOver={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-                  onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
-                >
-                  <FaUsers style={iconStyle} />
+              <div className="admin-cards-container">
+                <div className="admin-card">
+                  <FaUsers className="admin-card-icon" />
                   <div>
-                    <h3 style={{ color: "#e0d074" }}>Users</h3>
+                    <h3>Users</h3>
                     <p>Manage user accounts and permissions</p>
                   </div>
                 </div>
 
-                <div 
-                  style={cardStyle}
-                  onMouseOver={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-                  onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
-                >
-                  <FaCalendarAlt style={iconStyle} />
+                <div className="admin-card">
+                  <FaCalendarAlt className="admin-card-icon" />
                   <div>
-                    <h3 style={{ color: "#e0d074" }}>Activities</h3>
+                    <h3>Activities</h3>
                     <p>Create and manage club activities</p>
                   </div>
                 </div>
 
-                <div 
-                  style={cardStyle}
-                  onMouseOver={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-                  onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}
-                >
-                  <FaChartLine style={iconStyle} />
+                <div className="admin-card">
+                  <FaChartLine className="admin-card-icon" />
                   <div>
-                    <h3 style={{ color: "#e0d074" }}>Engagement</h3>
+                    <h3>Engagement</h3>
                     <p>Track member participation and growth</p>
                   </div>
                 </div>
