@@ -27,30 +27,29 @@ app.use(express.json())
 app.use(cors({
   origin: ['https://klef-rpaclub.vercel.app'], // Replace with your frontend URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
+  credentials: true
 }));
-// app.use(cors())
+app.use(cors())
 
 
 
 const dburl = process.env.MONGO_URI
-// mongoose.connect(dburl).then(() => {
-//     console.log("Connected to the database")
-// }).catch((err) => {
-//     console.log(err)
-// })
-
-mongoose.connect(dburl, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-  socketTimeoutMS: 30000, // Close sockets after 30s of inactivity
-}).then(() => {
+mongoose.connect(dburl).then(() => {
     console.log("Connected to the database")
 }).catch((err) => {
-    console.log("MongoDB connection error:", err)
+    console.log(err)
 })
+
+// mongoose.connect(dburl, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+//   socketTimeoutMS: 30000, // Close sockets after 30s of inactivity
+// }).then(() => {
+//     console.log("Connected to the database")
+// }).catch((err) => {
+//     console.log("MongoDB connection error:", err)
+// })
 
 app.get("/", (req, res) => {
   res.send(
