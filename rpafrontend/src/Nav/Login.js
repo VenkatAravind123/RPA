@@ -94,7 +94,7 @@ export default function Login() {
         <div className="form-actions">
           <button type="submit">Login</button>
         </div>
-        <Link to="/register" className='register'>Don't have an account? Register here</Link>
+        <Link to="/register" className='register'>Don't have an account? <span>Register here</span></Link>
       </form>
     </div>
   );

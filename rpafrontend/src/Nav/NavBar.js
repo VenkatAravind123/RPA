@@ -24,11 +24,69 @@ const cookies = new Cookies();
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { isLoggedIn, logout, userRole } = useAuth();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [name, setName] = useState('');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+
+  useEffect(() => {
+    const closeMenu = (e) => {
+      if (isMenuOpen && !e.target.closest('.nav-links') && !e.target.closest('.hamburger')) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', closeMenu);
+    return () => document.removeEventListener('click', closeMenu);
+  }, [isMenuOpen]);
+
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isMenuOpen]);
+
+  const handleLogoClick = (e) => {
+    if (window.innerWidth <= 768) {
+      
+      setIsMenuOpen(!isMenuOpen);
+    }
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.logo-container') && 
+          !e.target.closest('.nav-links') && 
+          isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMenuOpen]);
+  
+ 
+
+  
 
   const handleLogout = () => {
     logout();
@@ -66,7 +124,7 @@ export default function NavBar() {
 
   return (
     <div className="page-wrapper">
-      <nav className="navbar">
+      <nav className={`navbar ${scrolled ? "scrolled" : ''}`}>
         <div className="nav-container">
           <div className='left-section'>
           {isLoggedIn && (userRole === 'Admin'|| userRole === 'Manager') && (
@@ -75,30 +133,61 @@ export default function NavBar() {
               </Link>
             )}
           <div className="logo-container">
-            <Link to="/" className="nav-item1">
-              <img src={rpa} alt="RPA Challenge" className="logo" />
-            </Link>
+          <Link 
+                to="/" 
+                className="nav-item1"
+                onClick={handleLogoClick}
+              >
+                <img src={rpa} alt="RPA Challenge" className="logo" />
+              </Link>
           </div>
           </div>
-          <div className="nav-links">
-            <Link to="/" className="nav-item">Home</Link>
-            <Link to="/about" className="nav-item">About</Link>
-            <Link to="/contact" className="nav-item">Contact</Link>
-            <Link to="/activities" className="nav-item">Activities</Link>
-            <Link to="/team" className="nav-item">Team</Link>
+          
+
+          <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
+          {[
+              { to: "/", text: "Home" },
+              { to: "/about", text: "About" },
+              { to: "/contact", text: "Contact" },
+              { to: "/activities", text: "Activities" },
+              { to: "/team", text: "Team" }
+            ].map(({ to, text }) => (
+              <Link 
+                key={to}
+                to={to} 
+                className="nav-item" 
+                onClick={closeMenu}
+              >
+                {text}
+              </Link>
+            ))}
            
             {isLoggedIn && data ? (
-              <p style={{color:"white",padding:"10px",cursor:"pointer"}} onClick={profile}><FaRegUser />{name}</p>
+              <div className="nav-item user-profile" onClick={() => {
+                profile();
+                closeMenu();
+              }}>
+                <FaRegUser />
+                <span>{name}</span>
+              </div>
             ) : (
               isLoggedIn && <p>Loading...</p>
             )}
             {isLoggedIn ? (
-              <button className="nav-button"  onClick={handleLogout}><HiOutlineLogout style={{width: "18px",
-                height: "18px",
-                marginRight: "4px",
-                verticalAlign: "middle"}}/>Logout</button>
+              <button 
+                className="nav-button" 
+                onClick={() => {
+                  handleLogout();
+                  closeMenu();
+                }}
+              >
+                <HiOutlineLogout className="nav-icon" />
+                Logout
+              </button>
             ) : (
-              <Link to="/login" className="nav-button">Login</Link>
+              <Link to="/login" className="nav-button" onClick={closeMenu}>
+                Login
+              </Link>
             )}
           </div>
         </div>

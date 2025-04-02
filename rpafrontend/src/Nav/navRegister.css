@@ -14,7 +14,12 @@
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(224, 208, 116, 0.2);
   }
-  
+  .login-title{
+    color: #e0d074;
+    font-size: 24px;
+    
+    margin-bottom: 20px;
+  }
   .register-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(224, 208, 116, 0.3);

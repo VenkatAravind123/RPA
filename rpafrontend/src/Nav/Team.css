@@ -1,0 +1,191 @@
+.team-container {
+    padding: 3rem;
+    color: #fff;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .team-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  
+  .team-header h1 {
+    color: #e0d074;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .team-header p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+  }
+  
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 5rem;
+    justify-items: center;
+    padding: 0 1rem;
+  }
+  
+  .leadership-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 3rem auto;
+    justify-items: center;
+  }
+  
+  .team-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .team-card.faculty {
+    padding: 2.5rem;
+    border: 3px solid gold;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+  }
+  
+  .team-card.leadership {
+    border: 2px solid #e0d074;
+  }
+  
+  .member-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
+    border: 3px solid rgba(224, 208, 116, 0.7);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .member-image.faculty {
+    width: 220px;
+    height: 220px;
+    border: 5px solid gold;
+  }
+  
+  .member-image.leadership {
+    width: 200px;
+    height: 200px;
+    border: 4px solid #e0d074;
+  }
+  
+  .member-name {
+    color: #e0d074;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .member-name.faculty {
+    font-size: 1.8rem;
+  }
+  
+  .member-name.leadership {
+    font-size: 1.6rem;
+  }
+  
+  .member-role {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .member-role.faculty {
+    font-size: 1.4rem;
+  }
+  
+  .member-role.leadership {
+    font-size: 1.3rem;
+  }
+  
+  .member-department {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+  }
+  
+  .social-links {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .social-icon {
+    font-size: 1.2rem;
+    color: #e0d074;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .social-icon:hover {
+    transform: translateY(-3px);
+  }
+  
+  @media (max-width: 768px) {
+    .team-container {
+      padding: 1rem;
+    }
+  
+    .team-header {
+      margin-bottom: 2rem;
+    }
+  
+    .team-header h1 {
+      font-size: 1.8rem;
+    }
+  
+    .team-header p {
+      font-size: 1rem;
+    }
+  
+    .team-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 0;
+    }
+  
+    .leadership-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 0 1rem;
+    }
+  
+    .team-card {
+      border-radius: 15px;
+      padding: 1rem;
+    }
+  
+    .team-card.faculty {
+      padding: 1rem;
+    }
+  
+    .member-image {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 1rem;
+    }
+  
+    .member-image.faculty {
+      width: 180px;
+      height: 180px;
+    }
+  
+    .member-image.leadership {
+      width: 150px;
+      height: 150px;
+    }
+  }

@@ -1,107 +1,149 @@
-.logo1 {
-  height: 60px;
-  width: 60px;
-}
-
-.logo1-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 2rem;
-}
-
+/* Main container styles */
 .login-container {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 15px;
-  padding: 2rem;
-  width: 90%;
-  max-width: 500px;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  width: min(90%, 500px);
   margin: 2rem auto;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
-.login-container h2 {
+/* Logo styles */
+.logo1 {
+  height: clamp(40px, 8vw, 60px);
+  width: clamp(40px, 8vw, 60px);
+}
+
+.loading-text1{
+  /* HTML: <div class="loader"></div> */
+  
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: 
+    radial-gradient(farthest-side,#ffa516 94%,#0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%,#ffa516);
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  animation: l13 1s infinite linear;
+}
+@keyframes l13{ 
+  100%{transform: rotate(1turn)}
+}
+.logo1-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(8px, 2vw, 10px);
   color: #e0d074;
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2rem;
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
 }
 
+/* Form group styles */
 .form-group {
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  position: relative;
 }
 
 .form-group input {
-  width: 95%;
-  padding: 1rem;
+  width: 100%;
+  padding: clamp(0.8rem, 2vw, 1rem);
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid rgba(224, 208, 116, 0.3);
   border-radius: 8px;
   color: #fff;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
-.form-group input:focus {
-  outline: none;
-  border-color: #e0d074;
-  box-shadow: 0 0 15px rgba(224, 208, 116, 0.2);
-}
-
-.form-group input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
+/* Form action styles */
 .form-actions {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: clamp(1.5rem, 4vw, 2rem);
+  width: 100%;
+}
+.register{
+  color: #e0d074;
+}
+.register span{
+  color: #d4b93c;
+  cursor: pointer;
 }
 
 .form-actions button {
   background: linear-gradient(135deg, #e0d074 0%, #d4b93c 100%);
   color: #1a1a1a;
-  padding: 1rem 2rem;
+  padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   font-weight: bold;
   transition: all 0.3s ease;
-  width: 200px;
+  width: min(100%, 200px);
 }
 
-.form-actions button:hover {
-  background: transparent;
-  border: 2px solid #e0d074;
-  color: #e0d074;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(224, 208, 116, 0.3);
-}
-
-.form-actions button:active {
-  transform: translateY(0);
-}
-
-.register
-{
-  color: #e0d074;
-  text-align: center;
-  margin-top: 2rem;
-  text-decoration: none;
-}
+/* Mobile Styles */
 @media (max-width: 768px) {
   .login-container {
     width: 95%;
-    padding: 1.5rem;
     margin: 1rem auto;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .form-group input {
+    width: 100%;
+    max-width: 100%;
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.8rem;
   }
 
   .form-actions button {
     width: 100%;
+    padding: 0.8rem;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 360px) {
+  .login-container {
+    width: 98%;
+    padding: 1rem;
+    margin: 0.5rem auto;
+  }
+
+  .form-group {
+    margin-bottom: 0.8rem;
+  }
+
+  .form-group input {
+    padding: 0.7rem;
+    font-size: 14px;
+  }
+}
+
+/* Landscape Mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .login-container {
+    padding: 1rem;
+    margin: 0.5rem auto;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .logo1-container {
+    margin-bottom: 0.8rem;
+  }
+
+  .form-group {
+    margin-bottom: 0.6rem;
   }
 }

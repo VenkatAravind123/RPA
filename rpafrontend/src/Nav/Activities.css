@@ -1,0 +1,208 @@
+.activities-container {
+  padding: clamp(1rem, 4vw, 2rem);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  margin-top: 2rem;
+}
+
+.activity-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.image-container {
+  width: 100%;
+  height: 220px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.activity-image1 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.3s ease;
+}
+
+.activity-title {
+  color: #e0d074;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  margin: 0;
+}
+
+.activity-description {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.activity-venue,
+.activity-price,
+.activity-date {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  margin: 0;
+}
+
+.activity-venue {
+  color: #e0d074;
+}
+
+.toggle-button,
+.register-button {
+  background: linear-gradient(135deg, #e0d074 0%, #d4b93c 100%);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 25px;
+  padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: auto;
+}
+
+.toggle-button {
+  margin: 0 auto;
+  display: block;
+}
+
+.register-button:disabled {
+  background: rgba(224, 208, 116, 0.5);
+  cursor: not-allowed;
+}
+
+.register-button:hover:not(:disabled),
+.toggle-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(224, 208, 116, 0.3);
+}
+
+.loading-text{
+  /* HTML: <div class="loader"></div> */
+  
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: 
+    radial-gradient(farthest-side,#ffa516 94%,#0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%,#ffa516);
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  animation: l13 1s infinite linear;
+}
+@keyframes l13{ 
+  100%{transform: rotate(1turn)}
+}
+
+.no-activities {
+  text-align: center;
+  color: #fff;
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .activities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .image-container {
+    height: 200px;
+  }
+
+  .activity-card {
+    padding: 1rem;
+  }
+
+  .toggle-button,
+  .register-button {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .activities-container {
+    padding: 0.8rem;
+  }
+
+  .image-container {
+    height: 180px;
+  }
+
+  .activity-title {
+    font-size: 1.2rem;
+  }
+
+  .activity-description,
+  .activity-venue,
+  .activity-price,
+  .activity-date {
+    font-size: 0.9rem;
+  }
+}
+
+/* Loading Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.activity-card {
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+.activity-card:hover .activity-image1 {
+  transform: scale(1.05);
+}
+
+.activity-card:nth-child(2) { animation-delay: 0.1s; }
+.activity-card:nth-child(3) { animation-delay: 0.2s; }
+.activity-card:nth-child(4) { animation-delay: 0.3s; }
+.activity-card:nth-child(n+5) { animation-delay: 0.4s; }
+.activity-image1[src=""],
+.activity-image1:not([src]) {
+  opacity: 0;
+}
+
+.image-container::after {
+  content: "No Image Available";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  display: none;
+}
+
+.activity-image1[src=""] + .image-container::after,
+.activity-image1:not([src]) + .image-container::after {
+  display: block;
+}
