@@ -6,86 +6,86 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
  
 // Register a new user
-const register = async(request,response)=>{
-    try{
-        const { name, email, phonenumber, password, department, role } = request.body;
-
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const user1 = new user({
-        name,
-        email,
-        phonenumber,
-        password: hashedPassword,
-        department,
-        role,
-    });
-    await user1.save();
-    response.status(200).send("User Registered Successfully");
-
-    }
-    catch(error){
-        console.error(error)
-        response.status(500).send("Internal Server Error")
-    }
-}
-
-// Register a new user
-// const register = async(request, response) => {
-//     try {
+// const register = async(request,response)=>{
+//     try{
 //         const { name, email, phonenumber, password, department, role } = request.body;
 
-//         // Check if user with this email already exists
-//         const existingUser = await user.findOne({ email });
-//         if (existingUser) {
-//             return response.status(400).json({
-//                 success: false,
-//                 message: "Email already registered. Please use a different email or login."
-//             });
-//         }
+//     // Hash the password
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(password, salt);
 
-//         // Hash the password
-//         const salt = await bcrypt.genSalt(10);
-//         const hashedPassword = await bcrypt.hash(password, salt);
+//     const user1 = new user({
+//         name,
+//         email,
+//         phonenumber,
+//         password: hashedPassword,
+//         department,
+//         role,
+//     });
+//     await user1.save();
+//     response.status(200).send("User Registered Successfully");
 
-//         // Create new user with default role if not provided
-//         const user1 = new user({
-//             name,
-//             email,
-//             phonenumber,
-//             password: hashedPassword,
-//             department,
-//             role: role || "user", // Default to "user" if role not provided
-//         });
-
-//         await user1.save();
-        
-//         return response.status(200).json({
-//             success: true,
-//             message: "User registered successfully"
-//         });
 //     }
-//     catch(error) {
-//         console.error("Registration error:", error);
-        
-//         // Send more specific error messages based on the error type
-//         if (error.name === 'ValidationError') {
-//             return response.status(400).json({
-//                 success: false,
-//                 message: "Validation Error: Please check your input data.",
-//                 error: error.message
-//             });
-//         }
-        
-//         return response.status(500).json({
-//             success: false,
-//             message: "Registration failed. Please try again later.",
-//             error: process.env.NODE_ENV === 'development' ? error.message : 'Internal Server Error'
-//         });
+//     catch(error){
+//         console.error(error)
+//         response.status(500).send("Internal Server Error")
 //     }
-// };
+// }
+
+// Register a new user
+const register = async(request, response) => {
+    try {
+        const { name, email, phonenumber, password, department, role } = request.body;
+
+        // Check if user with this email already exists
+        const existingUser = await user.findOne({ email });
+        if (existingUser) {
+            return response.status(400).json({
+                success: false,
+                message: "Email already registered. Please use a different email or login."
+            });
+        }
+
+        // Hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create new user with default role if not provided
+        const user1 = new user({
+            name,
+            email,
+            phonenumber,
+            password: hashedPassword,
+            department,
+            role: role || "User", // Default to "user" if role not provided
+        });
+
+        await user1.save();
+        
+        return response.status(200).json({
+            success: true,
+            message: "User registered successfully"
+        });
+    }
+    catch(error) {
+        console.error("Registration error:", error);
+        
+        // Send more specific error messages based on the error type
+        if (error.name === 'ValidationError') {
+            return response.status(400).json({
+                success: false,
+                message: "Validation Error: Please check your input data.",
+                error: error.message
+            });
+        }
+        
+        return response.status(500).json({
+            success: false,
+            message: "Registration failed. Please try again later.",
+            error: process.env.NODE_ENV === 'development' ? error.message : 'Internal Server Error'
+        });
+    }
+};
 
 
 const login = async (request,response) =>{
