@@ -6,23 +6,18 @@ const bcrypt = require("bcryptjs");
 const auth = require("../auth.jsx")
 require("dotenv").config()
 
-try {
-  const crypto = require('crypto');
-  bcrypt.setRandomFallback((len) => {
-    return Array.from(crypto.randomBytes(len));
-  });
-  console.log("Set crypto fallback for bcrypt");
-} catch (error) {
-  console.warn("Could not set crypto fallback:", error.message);
-  // Provide a simple non-secure fallback as a last resort
-  bcrypt.setRandomFallback((len) => {
-    const arr = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      arr[i] = Math.floor(Math.random() * 256);
-    }
-    return Array.from(arr);
-  });
-  console.warn("Using non-secure random fallback for bcrypt");
+const getRandomValues = (len) => {
+  const randomValues = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    randomValues[i] = Math.floor(Math.random() * 256);
+  }
+  return randomValues;
+};
+
+// Set the fallback
+if (typeof bcrypt.setRandomFallback === 'function') {
+  bcrypt.setRandomFallback(len => Array.from(getRandomValues(len)));
+  console.log("Set custom random fallback for bcryptjs");
 }
 
 
@@ -63,6 +58,24 @@ app.get("/", (req, res) => {
   );
 });
 
+app.get('/test-bcrypt', async (req, res) => {
+  try {
+    const testPassword = '123456';
+    const hashedPassword = await bcrypt.hash(testPassword, 5);
+    
+    res.status(200).json({
+      success: true,
+      message: 'bcryptjs working correctly',
+      hash: hashedPassword
+    });
+  } catch (error) {
+    console.error('bcrypt test error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
 
 app.use("/user", userRoutes)
 app.get("/protected", auth(['Admin', 'User', 'Manager']), (req, res) => {

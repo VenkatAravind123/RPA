@@ -1,6 +1,6 @@
 const user = require("../models/User.jsx");
 const activity = require("../models/Activity.jsx")
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");d 
 
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
@@ -43,10 +43,9 @@ const register = async(request, response) => {
             });
         }
 
-        // CRITICAL CHANGE: Use lower bcrypt rounds for Vercel
-        // Standard is 10 rounds, but for serverless use 6 or lower
-        const salt = await bcrypt.genSalt(6); // Reduced from 10 to 6
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // Use a much lower cost factor for serverless environments
+        // This is the most important change for Vercel
+        const hashedPassword = await bcrypt.hash(password, 5); // Skip genSalt, use direct rounds
 
         const user1 = new user({
             name,
