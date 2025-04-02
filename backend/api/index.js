@@ -8,9 +8,10 @@ const app = express()
 app.use(express.json())
 //'http://localhost:3000'
 app.use(cors({
-  origin: ['https://klef-rpaclub.vercel.app','http://localhost:3000'], // Replace with your frontend URL
+  origin: ['https://klef-rpaclub.vercel.app'], // Replace with your frontend URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 // app.use(cors())
 
