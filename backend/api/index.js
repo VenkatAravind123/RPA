@@ -17,10 +17,21 @@ app.use(cors({
 
 
 const dburl = process.env.MONGO_URI
-mongoose.connect(dburl).then(() => {
+// mongoose.connect(dburl).then(() => {
+//     console.log("Connected to the database")
+// }).catch((err) => {
+//     console.log(err)
+// })
+
+mongoose.connect(dburl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+  socketTimeoutMS: 30000, // Close sockets after 30s of inactivity
+}).then(() => {
     console.log("Connected to the database")
 }).catch((err) => {
-    console.log(err)
+    console.log("MongoDB connection error:", err)
 })
 
 app.get("/", (req, res) => {

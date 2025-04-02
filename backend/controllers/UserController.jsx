@@ -6,29 +6,63 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
  
 // Register a new user
-const register = async(request,response)=>{
-    try{
+// const register = async(request,response)=>{
+//     try{
+//         const { name, email, phonenumber, password, department, role } = request.body;
+
+//     // Hash the password
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(password, salt);
+
+//     const user1 = new user({
+//         name,
+//         email,
+//         phonenumber,
+//         password: hashedPassword,
+//         department,
+//         role,
+//     });
+//     await user1.save();
+//     response.status(200).send("User Registered Successfully");
+
+//     }
+//     catch(error){
+//         console.error(error)
+//         response.status(500).send("Internal Server Error")
+//     }
+// }
+const register = async(request, response) => {
+    try {
         const { name, email, phonenumber, password, department, role } = request.body;
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+        // Check if email already exists
+        const existingUser = await user.findOne({ email });
+        if (existingUser) {
+            return response.status(400).json({
+                message: "Email already registered"
+            });
+        }
 
-    const user1 = new user({
-        name,
-        email,
-        phonenumber,
-        password: hashedPassword,
-        department,
-        role,
-    });
-    await user1.save();
-    response.status(200).send("User Registered Successfully");
+        // CRITICAL CHANGE: Use lower bcrypt rounds for Vercel
+        // Standard is 10 rounds, but for serverless use 6 or lower
+        const salt = await bcrypt.genSalt(6); // Reduced from 10 to 6
+        const hashedPassword = await bcrypt.hash(password, salt);
 
+        const user1 = new user({
+            name,
+            email,
+            phonenumber,
+            password: hashedPassword,
+            department,
+            role: role || "User",
+        });
+        
+        await user1.save();
+        response.status(201).json({ message: "User Registered Successfully" });
     }
-    catch(error){
-        console.error(error)
-        response.status(500).send("Internal Server Error")
+    catch(error) {
+        console.error("Registration error:", error);
+        response.status(500).json({ message: "Registration failed", error: error.message });
     }
 }
 
