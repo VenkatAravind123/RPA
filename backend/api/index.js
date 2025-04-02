@@ -2,8 +2,30 @@ const mongoose = require("mongoose")
 const express = require("express")
 const cors = require("cors")
 const userRoutes = require("../Routes/UserRoutes.jsx")
+const bcrypt = require("bcryptjs"); 
 const auth = require("../auth.jsx")
 require("dotenv").config()
+
+try {
+  const crypto = require('crypto');
+  bcrypt.setRandomFallback((len) => {
+    return Array.from(crypto.randomBytes(len));
+  });
+  console.log("Set crypto fallback for bcrypt");
+} catch (error) {
+  console.warn("Could not set crypto fallback:", error.message);
+  // Provide a simple non-secure fallback as a last resort
+  bcrypt.setRandomFallback((len) => {
+    const arr = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      arr[i] = Math.floor(Math.random() * 256);
+    }
+    return Array.from(arr);
+  });
+  console.warn("Using non-secure random fallback for bcrypt");
+}
+
+
 const app = express()
 app.use(express.json())
 //'http://localhost:3000'
