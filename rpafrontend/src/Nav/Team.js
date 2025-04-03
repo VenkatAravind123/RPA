@@ -45,7 +45,7 @@ export default function Team() {
             <p className="member-department">{member.department}</p>
             <div className="social-links">
               <FaLinkedin className="social-icon" onClick={() => handleSocialClick(member.social?.linkedin)} />
-              <FaEnvelope className="social-icon" onClick={() => handleSocialClick(`mailto:${member.email}`)} />
+              {/* <FaEnvelope className="social-icon" onClick={() => handleSocialClick(`mailto:${member.email}`)} /> */}
             </div>
           </div>
         ))}

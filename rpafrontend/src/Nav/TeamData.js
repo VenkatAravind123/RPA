@@ -29,6 +29,7 @@ const team = [
     image: asheshSir,
     social: {
       linkedin: "https://www.linkedin.com/in/imasheshk/",
+      
     },
   },
   
@@ -61,7 +62,7 @@ const team = [
     bio: "Pranay is a motivated junior core team member, eager to learn and contribute to our projects.",
     image: pranay,
     social: {
-      github: "https://github.com/neelashashank",
+      github: "https://github.com/PranayVardhanChowdary",
       linkedin: "https://www.linkedin.com/in/pranay-vardhan-nalabothula-277172243/",
       email: "2200032247@kluniversity.in",
     },
@@ -75,7 +76,7 @@ const team = [
     social: {
       github: "https://github.com/thotaarshitha",
       linkedin: "https://www.linkedin.com/in/thotaarshitha/",
-      email: "thotaarshitha@example.com",
+      email: "2200030153@kluniversity.in",
     },
   },
   {
@@ -86,7 +87,7 @@ const team = [
     social: {
       github: "https://github.com/yasaswini",
       linkedin: "https://www.linkedin.com/in/yasaswini/",
-      email: "yasaswini@example.com",
+      email: "2200031646@kluniversity.in",
     },
   },
   {
@@ -108,7 +109,7 @@ const team = [
     social: {
       github: "https://github.com/manaswini",
       linkedin: "https://www.linkedin.com/in/manaswini/",
-      email: "manaswini@example.com",
+      email: "2200030098@kluniversity.in",
     },
   },
   {
@@ -119,7 +120,7 @@ const team = [
     social: {
       github: "https://github.com/kavyasri",
       linkedin: "https://www.linkedin.com/in/kavyasri/",
-      email: "kavyasri@example.com",
+      email: "2200031148@kluniversity.in",
     },
   },
   {
@@ -130,7 +131,7 @@ const team = [
     social: {
       github: "https://github.com/triveni",
       linkedin: "https://www.linkedin.com/in/triveni/",
-      email: "triveni@example.com",
+      email: "2200031616@kluniversity.in",
     },
   },
   {
@@ -141,7 +142,7 @@ const team = [
     social: {
       github: "https://github.com/sailakshmi",
       linkedin: "https://www.linkedin.com/in/sailakshmi/",
-      email: "sailakshmi@example.com",
+      email: "2200031031@kluniversity.in",
     },
   },
   {
@@ -152,7 +153,7 @@ const team = [
     social: {
       github: "https://github.com/saicharitha",
       linkedin: "https://www.linkedin.com/in/saicharitha/",
-      email: "saicharitha@example.com",
+      email: "2200030672@kluniversity.in",
     },
   },
   {
@@ -174,7 +175,7 @@ const team = [
     social: {
       github: "https://github.com/durgaharshitha",
       linkedin: "https://www.linkedin.com/in/durgaharshitha/",
-      email: "durgaharshitha@example.com",
+      email: "2200030230@kluniversity.in",
     },
   },
   {
@@ -185,7 +186,7 @@ const team = [
     social: {
       github: "https://github.com/deekshitha",
       linkedin: "https://www.linkedin.com/in/deekshitha/",
-      email: "deekshitha@example.com",
+      email: "2200040012@kluniversity.in",
     },
   },
   {
@@ -219,7 +220,7 @@ const team = [
     social: {
       github: "https://github.com/hanisha",
       linkedin: "https://www.linkedin.com/in/hanisha/",
-      email: "hanisha@example.com",
+      email: "2200030675@kluniversity.in",
     },
   },
   {
@@ -241,7 +242,7 @@ const team = [
     social: {
       github: "https://github.com/sailaja",
       linkedin: "https://www.linkedin.com/in/sailaja/",
-      email: "sailaja@example.com",
+      email: "2200030922@kluniversity.in",
     },
   },
   {
@@ -252,7 +253,7 @@ const team = [
     social: {
       github: "https://github.com/tanuja",
       linkedin: "https://www.linkedin.com/in/tanuja/",
-      email: "tanuja@example.com",
+      email: "2200030673@kluniversity.in",
     },
   },
   {
@@ -263,7 +264,7 @@ const team = [
     social: {
       github: "https://github.com/jayasri",
       linkedin: "https://www.linkedin.com/in/jayasri/",
-      email: "jayasri@example.com",
+      email: "2200032574@kluniversity.in",
     },
   },
   
@@ -274,8 +275,8 @@ const team = [
     image: leethika,
     social: {
       github: "https://github.com/leethika",
-      linkedin: "https://www.linkedin.com/in/leethika/",
-      email: "leethika@example.com",
+      linkedin: "https://www.linkedin.com/in/leethika-gutta/",
+      email: "2200039010@kluniversity.in",
     },
   },
 ];
