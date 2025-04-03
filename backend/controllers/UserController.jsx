@@ -5,96 +5,53 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 
 
-// Reg
-const register = async(request, response) => {
-    try {
+const register = async(request,response)=>{
+    try{
         const { name, email, phonenumber, password, department, role } = request.body;
 
-        // Check if email exists
-        const existingUser = await user.findOne({ email });
-        if (existingUser) {
-            return response.status(400).json({ message: "Email already registered" });
-        }
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Use SHA-256 instead of bcrypt for Vercel
-        const crypto = require('crypto');
-        const hashedPassword = crypto.createHash('sha256')
-            .update(password + email) // Add email as a simple "salt"
-            .digest('hex');
+    const user1 = new user({
+        name,
+        email,
+        phonenumber,
+        password: hashedPassword,
+        department,
+        role,
+    });
+    await user1.save();
+    response.status(200).send("User Registered Successfully");
 
-        const user1 = new user({
-            name,
-            email,
-            phonenumber,
-            password: hashedPassword,
-            department,
-            role: role || "User",
-        });
-        
-        await user1.save();
-        return response.status(201).json({ message: "User Registered Successfully" });
     }
-    catch(error) {
-        console.error("Registration error:", error);
-        return response.status(500).json({ message: "Registration failed" });
+    catch(error){
+        console.error(error)
+        response.status(500).send("Internal Server Error")
     }
-};
+}
 
 
-const login = async (request, response) => {
-    try {
-        const { email, password } = request.body;
-        
-        if (!email || !password) {
-            return response.status(400).json({ message: "Email and password are required" });
+const login = async (request,response) =>{
+    try{
+        const {email,password} = request.body;
+        const user1 = await user.findOne({email:email});
+        if(!user1){
+            return response.status(400).send("Invalid Credentials");
         }
-        
-        console.log("Login attempt for:", email);
-        
-        // Find user by email
-        const userData = await user.findOne({ email });
-        if (!userData) {
-            console.log("User not found:", email);
-            return response.status(401).json({ message: "Invalid email or password" });
+        const validPassword = await bcrypt.compare(password,user1.password);
+        if(!validPassword){
+            return response.status(400).send("Invalid Credentials");
         }
-        
-        // Compare passwords - handle different password formats
-        let validPassword = false;
-        
-        // First try SHA-256 with email salt (our new approach)
-        const crypto = require('crypto');
-        const hashedPassword = crypto.createHash('sha256')
-            .update(password + email) // Same salt approach as register
-            .digest('hex');
-            
-        // Compare hashed password with stored password
-        validPassword = (hashedPassword === userData.password);
-        
-        console.log("Password verification:", validPassword ? "successful" : "failed");
-        
-        if (!validPassword) {
-            return response.status(401).json({ message: "Invalid email or password" });
-        }
-
-        // Create JWT token
-        const token = jwt.sign(
-            { 
-                _id: userData._id, 
-                email: userData.email, 
-                role: userData.role,
-                name: userData.name
-            },
-            process.env.JWT_SECRET_KEY || "fallback_secret_key",
-            { expiresIn: '1d' }
-        );
-        
-        console.log("Login successful for:", email);
-        response.status(200).json({ token, role: userData.role });
-    } catch (error) {
-        console.error("Login error:", error);
-        response.status(500).json({ message: "Login failed", error: error.message });
+        const token = jwt.sign({userId:user1._id,email:user1.email,name:user1.name,role:user1.role},process.env.JWT_SECRET_KEY,{expiresIn:"1h"});
+        response.json({token})
     }
-};
+    catch(error){
+        console.error(error)
+        response.status(500).send("Internal Server Error")
+    }
+}
+
 
 const getAllUsers = async (request,response) =>{
     try{
