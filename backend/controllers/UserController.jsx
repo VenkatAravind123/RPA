@@ -1,10 +1,32 @@
 const user = require("../models/User.jsx");
 const activity = require("../models/Activity.jsx")
-const bcrypt = require("bcryptjs");d 
-
+// const bcrypt = require("bcryptjs");
+const crypto = require('crypto');
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
+
+const hashPassword = (password) => {
+    // Generate a random salt
+    const salt = crypto.randomBytes(16).toString('hex');
+    
+    // Hash the password with PBKDF2 - more reliable in serverless
+    const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    
+    // Return salt:hash format for storage
+    return `${salt}:${hash}`;
+  };
  
+  const verifyPassword = (password, storedPassword) => {
+    // Split the stored password into salt and hash
+    const [salt, hash] = storedPassword.split(':');
+    
+    // Hash the input password with the same salt
+    const calculatedHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    
+    // Compare the calculated hash with the stored hash
+    return calculatedHash === hash;
+  };
+
 // Register a new user
 // const register = async(request,response)=>{
 //     try{
@@ -43,9 +65,8 @@ const register = async(request, response) => {
             });
         }
 
-        // Use a much lower cost factor for serverless environments
-        // This is the most important change for Vercel
-        const hashedPassword = await bcrypt.hash(password, 5); // Skip genSalt, use direct rounds
+        // Use crypto-based password hashing instead of bcrypt
+        const hashedPassword = hashPassword(password);
 
         const user1 = new user({
             name,
@@ -63,7 +84,8 @@ const register = async(request, response) => {
         console.error("Registration error:", error);
         response.status(500).json({ message: "Registration failed", error: error.message });
     }
-}
+};
+
 
 // Register a new user
 // const register = async(request, response) => {
@@ -121,25 +143,39 @@ const register = async(request, response) => {
 // };
 
 
-const login = async (request,response) =>{
-    try{
-        const {email,password} = request.body;
-        const user1 = await user.findOne({email:email});
-        if(!user1){
-            return response.status(400).send("Invalid Credentials");
+const login = async (request, response) => {
+    try {
+        const { email, password } = request.body;
+        
+        const userData = await user.findOne({ email });
+        if (!userData) {
+            return response.status(401).json({ message: "Invalid email or password" });
         }
-        const validPassword = await bcrypt.compare(password,user1.password);
-        if(!validPassword){
-            return response.status(400).send("Invalid Credentials");
+        
+        // Use the new verification function instead of bcrypt.compare
+        const validPassword = verifyPassword(password, userData.password);
+        if (!validPassword) {
+            return response.status(401).json({ message: "Invalid email or password" });
         }
-        const token = jwt.sign({userId:user1._id,email:user1.email,name:user1.name,role:user1.role},process.env.JWT_SECRET_KEY,{expiresIn:"1h"});
-        response.json({token})
+
+        // Rest of your login code remains the same
+        const token = jwt.sign(
+            { 
+                _id: userData._id, 
+                email: userData.email, 
+                role: userData.role,
+                name: userData.name
+            },
+            process.env.JWT_SECRET_KEY,
+            { expiresIn: '1d' }
+        );
+        
+        response.status(200).json({ token, role: userData.role });
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ message: "Login failed", error: error.message });
     }
-    catch(error){
-        console.error(error)
-        response.status(500).send("Internal Server Error")
-    }
-}
+};
 
 const getAllUsers = async (request,response) =>{
     try{

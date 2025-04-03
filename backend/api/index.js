@@ -2,23 +2,23 @@ const mongoose = require("mongoose")
 const express = require("express")
 const cors = require("cors")
 const userRoutes = require("../Routes/UserRoutes.jsx")
-const bcrypt = require("bcryptjs"); 
+// const bcrypt = require("bcryptjs"); 
 const auth = require("../auth.jsx")
 require("dotenv").config()
 
-const getRandomValues = (len) => {
-  const randomValues = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    randomValues[i] = Math.floor(Math.random() * 256);
-  }
-  return randomValues;
-};
+// const getRandomValues = (len) => {
+//   const randomValues = new Uint8Array(len);
+//   for (let i = 0; i < len; i++) {
+//     randomValues[i] = Math.floor(Math.random() * 256);
+//   }
+//   return randomValues;
+// };
 
-// Set the fallback
-if (typeof bcrypt.setRandomFallback === 'function') {
-  bcrypt.setRandomFallback(len => Array.from(getRandomValues(len)));
-  console.log("Set custom random fallback for bcryptjs");
-}
+// // Set the fallback
+// if (typeof bcrypt.setRandomFallback === 'function') {
+//   bcrypt.setRandomFallback(len => Array.from(getRandomValues(len)));
+//   console.log("Set custom random fallback for bcryptjs");
+// }
 
 
 const app = express()
@@ -29,7 +29,7 @@ app.use(cors({
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));
-app.use(cors())
+// app.use(cors())
 
 
 
@@ -57,24 +57,24 @@ app.get("/", (req, res) => {
   );
 });
 
-app.get('/test-bcrypt', async (req, res) => {
-  try {
-    const testPassword = '123456';
-    const hashedPassword = await bcrypt.hash(testPassword, 5);
+// app.get('/test-bcrypt', async (req, res) => {
+//   try {
+//     const testPassword = '123456';
+//     const hashedPassword = await bcrypt.hash(testPassword, 5);
     
-    res.status(200).json({
-      success: true,
-      message: 'bcryptjs working correctly',
-      hash: hashedPassword
-    });
-  } catch (error) {
-    console.error('bcrypt test error:', error);
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
+//     res.status(200).json({
+//       success: true,
+//       message: 'bcryptjs working correctly',
+//       hash: hashedPassword
+//     });
+//   } catch (error) {
+//     console.error('bcrypt test error:', error);
+//     res.status(500).json({
+//       success: false,
+//       error: error.message
+//     });
+//   }
+// });
 
 app.use("/user", userRoutes)
 app.get("/protected", auth(['Admin', 'User', 'Manager']), (req, res) => {

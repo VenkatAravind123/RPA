@@ -4,7 +4,7 @@ const userroutes = require("../controllers/UserController.jsx");
 const {addactivity,getAllActivities,deleteActivity} = require("../controllers/AcitivityController.jsx");
 const auth = require("../auth.jsx");
 // Add this BEFORE your routes
-app.options('*', cors()); // Enable pre-flight for all routes
+// app.options('*', cors()); // Enable pre-flight for all routes
 
 
 

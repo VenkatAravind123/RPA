@@ -50,11 +50,19 @@ export default function Login() {
         navigate('/');
       }
     } catch (error) {
-
-      setError(error.response?.data || 'Login failed. Please check your credentials.');
       console.error('Login error:', error);
+      
+      if (error.response?.data?.message) {
+        setError(error.response.data.message);
+      } else if (typeof error.response?.data === 'string') {
+        setError(error.response.data);
+      } else {
+        setError('Login failed. Please check your credentials.');
+      }
+      
+      setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="login-container">
