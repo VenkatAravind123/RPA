@@ -1,6 +1,6 @@
 const config = 
 {
-    "url":"http://localhost:2021"
+    "url":"https://rpa-olive.vercel.app"
 }
 //https://rpa-olive.vercel.app
 //http://localhost:2021
