@@ -1,5 +1,6 @@
 const user = require("../models/User.jsx");
 const activity = require("../models/Activity.jsx")
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 
@@ -16,20 +17,22 @@ const register = async(request, response) => {
             return response.status(400).json({ message: "Email already registered" });
         }
 
-        // Store password as plain text - NO HASHING
+        // Hash password with bcryptjs - using lower rounds for Vercel
+        const salt = await bcrypt.genSalt(5); // Reduced rounds for serverless
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create user with hashed password
         const user1 = new user({
             name,
             email,
             phonenumber,
-            password: password, // PLAIN TEXT PASSWORD
+            password: hashedPassword,
             department,
             role: role || "User",
         });
-
-        console.log("Registering user with plain text password");
         
         await user1.save();
-        response.status(200).json({ message: "User Registered Successfully" });
+        response.status(201).json({ message: "User Registered Successfully" });
     }
     catch(error) {
         console.error("Registration error:", error);
@@ -45,75 +48,41 @@ const login = async (request, response) => {
     try {
         const { email, password } = request.body;
         
-        // Log the request body
-        console.log("Login attempt:", { 
-            email, 
-            password: password ? "Password provided" : "No password", 
-            passwordLength: password ? password.length : 0 
-        });
-        
         if (!email || !password) {
-            console.log("Missing email or password");
             return response.status(400).json({ message: "Email and password are required" });
         }
         
         // Find user by email
         const userData = await user.findOne({ email });
-        
-        // Debug user lookup
         if (!userData) {
-            console.log("No user found with email:", email);
             return response.status(401).json({ message: "Invalid email or password" });
         }
         
-        console.log("User found:", {
-            id: userData._id,
-            email: userData.email,
-            role: userData.role,
-            passwordStored: userData.password ? "Password exists" : "No password stored",
-            passwordLength: userData.password ? userData.password.length : 0
-        });
-        
-        // Direct plain text comparison
-        const validPassword = (password === userData.password);
-        console.log("Password check:", { 
-            match: validPassword,
-            inputLength: password.length,
-            storedLength: userData.password.length
-        });
-        
+        // Compare password with bcrypt
+        const validPassword = await bcrypt.compare(password, userData.password);
         if (!validPassword) {
             return response.status(401).json({ message: "Invalid email or password" });
         }
+
+        // Create JWT token
+        const token = jwt.sign(
+            { 
+                _id: userData._id, 
+                email: userData.email, 
+                role: userData.role,
+                name: userData.name
+            },
+            process.env.JWT_SECRET_KEY || "fallback_secret_key",
+            { expiresIn: '1d' }
+        );
         
-        // JWT token creation
-        try {
-            // Add a fallback secret key for development
-            const secretKey = process.env.JWT_SECRET_KEY || "fallback_secret_key";
-            console.log("Using JWT secret:", secretKey ? "Secret available" : "No secret");
-            
-            const token = jwt.sign(
-                { 
-                    _id: userData._id, 
-                    email: userData.email, 
-                    role: userData.role,
-                    name: userData.name
-                },
-                secretKey,
-                { expiresIn: '1d' }
-            );
-            
-            console.log("Login successful, token generated");
-            return response.status(200).json({ token, role: userData.role });
-        } catch (jwtError) {
-            console.error("JWT token generation error:", jwtError);
-            return response.status(500).json({ message: "Error generating authentication token" });
-        }
+        response.status(200).json({ token, role: userData.role });
     } catch (error) {
         console.error("Login error:", error);
-        return response.status(500).json({ message: "Login failed", error: error.message });
+        response.status(500).json({ message: "Login failed", error: error.message });
     }
 };
+
 
 const getAllUsers = async (request,response) =>{
     try{
