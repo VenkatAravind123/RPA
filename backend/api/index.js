@@ -75,9 +75,9 @@ app.get("/", (req, res) => {
 //     });
 //   }
 // });
-
+//['Admin', 'User', 'Manager']
 app.use("/user", userRoutes)
-app.get("/protected", auth(['Admin', 'User', 'Manager']), (req, res) => {
+app.get("/protected", auth(), (req, res) => {
   const user = {
     email: req.user.email,
     role: req.user.role,

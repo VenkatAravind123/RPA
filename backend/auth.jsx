@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./models/User.jsx');
 
 // Make roles parameter optional with default
-const auth = (roles = ["User", "Admin"]) => {
+const auth = (roles = ["User", "Admin","Manager"]) => {
   return async (req, res, next) => {
     try {
       // Check if authorization header exists
