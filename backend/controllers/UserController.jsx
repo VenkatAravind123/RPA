@@ -1,31 +1,31 @@
 const user = require("../models/User.jsx");
 const activity = require("../models/Activity.jsx")
 // const bcrypt = require("bcryptjs");
-const crypto = require('crypto');
+// const crypto = require('crypto');
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 
-const hashPassword = (password) => {
-    // Generate a random salt
-    const salt = crypto.randomBytes(16).toString('hex');
+// const hashPassword = (password) => {
+//     // Generate a random salt
+//     const salt = crypto.randomBytes(16).toString('hex');
     
-    // Hash the password with PBKDF2 - more reliable in serverless
-    const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+//     // Hash the password with PBKDF2 - more reliable in serverless
+//     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
     
-    // Return salt:hash format for storage
-    return `${salt}:${hash}`;
-  };
+//     // Return salt:hash format for storage
+//     return `${salt}:${hash}`;
+//   };
  
-  const verifyPassword = (password, storedPassword) => {
-    // Split the stored password into salt and hash
-    const [salt, hash] = storedPassword.split(':');
+//   const verifyPassword = (password, storedPassword) => {
+//     // Split the stored password into salt and hash
+//     const [salt, hash] = storedPassword.split(':');
     
-    // Hash the input password with the same salt
-    const calculatedHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+//     // Hash the input password with the same salt
+//     const calculatedHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
     
-    // Compare the calculated hash with the stored hash
-    return calculatedHash === hash;
-  };
+//     // Compare the calculated hash with the stored hash
+//     return calculatedHash === hash;
+//   };
 
 // Register a new user
 // const register = async(request,response)=>{
@@ -57,28 +57,26 @@ const register = async(request, response) => {
     try {
         const { name, email, phonenumber, password, department, role } = request.body;
 
-        // Check if email already exists
+        // Check if user already exists
         const existingUser = await user.findOne({ email });
         if (existingUser) {
-            return response.status(400).json({
-                message: "Email already registered"
-            });
+            return response.status(400).json({ message: "Email already registered" });
         }
 
-        // Use crypto-based password hashing instead of bcrypt
-        const hashedPassword = hashPassword(password);
-
+        // Store password as plain text - NO HASHING
         const user1 = new user({
             name,
             email,
             phonenumber,
-            password: hashedPassword,
+            password: password, // PLAIN TEXT PASSWORD
             department,
             role: role || "User",
         });
+
+        console.log("Registering user with plain text password");
         
         await user1.save();
-        response.status(201).json({ message: "User Registered Successfully" });
+        response.status(200).json({ message: "User Registered Successfully" });
     }
     catch(error) {
         console.error("Registration error:", error);
@@ -143,37 +141,78 @@ const register = async(request, response) => {
 // };
 
 
+// Login function with enhanced debugging
 const login = async (request, response) => {
     try {
         const { email, password } = request.body;
         
+        // Log the request body
+        console.log("Login attempt:", { 
+            email, 
+            password: password ? "Password provided" : "No password", 
+            passwordLength: password ? password.length : 0 
+        });
+        
+        if (!email || !password) {
+            console.log("Missing email or password");
+            return response.status(400).json({ message: "Email and password are required" });
+        }
+        
+        // Find user by email
         const userData = await user.findOne({ email });
+        
+        // Debug user lookup
         if (!userData) {
+            console.log("No user found with email:", email);
             return response.status(401).json({ message: "Invalid email or password" });
         }
         
-        // Use the new verification function instead of bcrypt.compare
-        const validPassword = verifyPassword(password, userData.password);
+        console.log("User found:", {
+            id: userData._id,
+            email: userData.email,
+            role: userData.role,
+            passwordStored: userData.password ? "Password exists" : "No password stored",
+            passwordLength: userData.password ? userData.password.length : 0
+        });
+        
+        // Direct plain text comparison
+        const validPassword = (password === userData.password);
+        console.log("Password check:", { 
+            match: validPassword,
+            inputLength: password.length,
+            storedLength: userData.password.length
+        });
+        
         if (!validPassword) {
             return response.status(401).json({ message: "Invalid email or password" });
         }
-
-        // Rest of your login code remains the same
-        const token = jwt.sign(
-            { 
-                _id: userData._id, 
-                email: userData.email, 
-                role: userData.role,
-                name: userData.name
-            },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: '1d' }
-        );
         
-        response.status(200).json({ token, role: userData.role });
+        // JWT token creation
+        try {
+            // Add a fallback secret key for development
+            const secretKey = process.env.JWT_SECRET_KEY || "fallback_secret_key";
+            console.log("Using JWT secret:", secretKey ? "Secret available" : "No secret");
+            
+            const token = jwt.sign(
+                { 
+                    _id: userData._id, 
+                    email: userData.email, 
+                    role: userData.role,
+                    name: userData.name
+                },
+                secretKey,
+                { expiresIn: '1d' }
+            );
+            
+            console.log("Login successful, token generated");
+            return response.status(200).json({ token, role: userData.role });
+        } catch (jwtError) {
+            console.error("JWT token generation error:", jwtError);
+            return response.status(500).json({ message: "Error generating authentication token" });
+        }
     } catch (error) {
-        console.error(error);
-        response.status(500).json({ message: "Login failed", error: error.message });
+        console.error("Login error:", error);
+        return response.status(500).json({ message: "Login failed", error: error.message });
     }
 };
 
