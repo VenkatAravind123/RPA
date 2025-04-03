@@ -1,38 +1,22 @@
-// This file sets up a fallback for bcryptjs to work in Vercel's environment
-
-// Custom random bytes generator
-const getRandomValues = (length) => {
-    const values = new Uint8Array(length);
-    for (let i = 0; i < length; i++) {
-      values[i] = Math.floor(Math.random() * 256);
-    }
-    return values;
-  };
-  
-  // Setup bcryptjs with fallback
-  // Alternative implementation for cryptoFallback.js
+// Simplified and more reliable implementation
 const setupBcryptFallback = () => {
     try {
       const bcrypt = require('bcryptjs');
       
-      // Log bcryptjs version to help diagnose issues
-      const version = require('bcryptjs/package.json').version;
-      console.log(`Using bcryptjs version: ${version}`);
-      
+      // Apply a direct simple fallback using JavaScript's Math.random
       if (typeof bcrypt.setRandomFallback === 'function') {
         bcrypt.setRandomFallback((len) => {
-          const arr = [];
-          for (let i = 0; i < len; i++) {
-            arr.push(Math.floor(Math.random() * 256));
-          }
-          return arr;
+          return Array.from({ length: len }, () => Math.floor(Math.random() * 256));
         });
-        console.log('bcryptjs random fallback set successfully');
-      } else {
-        console.log('bcryptjs.setRandomFallback function not available');
+        console.log('bcryptjs fallback set successfully');
       }
+      
+      // Test if bcrypt works
+      const testHash = bcrypt.hashSync('test', 3);
+      console.log('bcryptjs test successful');
     } catch (error) {
-      console.error('Error setting up bcryptjs fallback:', error.message);
+      console.error('bcryptjs setup error:', error.message);
     }
   };
+  
   module.exports = setupBcryptFallback;

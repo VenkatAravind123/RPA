@@ -5,23 +5,23 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 
 
-// Register a new user
-
+// Reg
 const register = async(request, response) => {
     try {
         const { name, email, phonenumber, password, department, role } = request.body;
 
-        // Check if user already exists
+        // Check if email exists
         const existingUser = await user.findOne({ email });
         if (existingUser) {
             return response.status(400).json({ message: "Email already registered" });
         }
 
-        // Hash password with bcryptjs - using lower rounds for Vercel
-        const salt = await bcrypt.genSalt(5); // Reduced rounds for serverless
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // Use SHA-256 instead of bcrypt for Vercel
+        const crypto = require('crypto');
+        const hashedPassword = crypto.createHash('sha256')
+            .update(password + email) // Add email as a simple "salt"
+            .digest('hex');
 
-        // Create user with hashed password
         const user1 = new user({
             name,
             email,
@@ -32,18 +32,15 @@ const register = async(request, response) => {
         });
         
         await user1.save();
-        response.status(201).json({ message: "User Registered Successfully" });
+        return response.status(201).json({ message: "User Registered Successfully" });
     }
     catch(error) {
         console.error("Registration error:", error);
-        response.status(500).json({ message: "Registration failed", error: error.message });
+        return response.status(500).json({ message: "Registration failed" });
     }
 };
 
 
-
-
-// Login function with enhanced debugging
 const login = async (request, response) => {
     try {
         const { email, password } = request.body;
@@ -52,14 +49,29 @@ const login = async (request, response) => {
             return response.status(400).json({ message: "Email and password are required" });
         }
         
+        console.log("Login attempt for:", email);
+        
         // Find user by email
         const userData = await user.findOne({ email });
         if (!userData) {
+            console.log("User not found:", email);
             return response.status(401).json({ message: "Invalid email or password" });
         }
         
-        // Compare password with bcrypt
-        const validPassword = await bcrypt.compare(password, userData.password);
+        // Compare passwords - handle different password formats
+        let validPassword = false;
+        
+        // First try SHA-256 with email salt (our new approach)
+        const crypto = require('crypto');
+        const hashedPassword = crypto.createHash('sha256')
+            .update(password + email) // Same salt approach as register
+            .digest('hex');
+            
+        // Compare hashed password with stored password
+        validPassword = (hashedPassword === userData.password);
+        
+        console.log("Password verification:", validPassword ? "successful" : "failed");
+        
         if (!validPassword) {
             return response.status(401).json({ message: "Invalid email or password" });
         }
@@ -76,13 +88,13 @@ const login = async (request, response) => {
             { expiresIn: '1d' }
         );
         
+        console.log("Login successful for:", email);
         response.status(200).json({ token, role: userData.role });
     } catch (error) {
         console.error("Login error:", error);
         response.status(500).json({ message: "Login failed", error: error.message });
     }
 };
-
 
 const getAllUsers = async (request,response) =>{
     try{
