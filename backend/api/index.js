@@ -43,24 +43,7 @@ app.get("/", (req, res) => {
   );
 });
 
-// app.get('/test-bcrypt', async (req, res) => {
-//   try {
-//     const testPassword = '123456';
-//     const hashedPassword = await bcrypt.hash(testPassword, 5);
-    
-//     res.status(200).json({
-//       success: true,
-//       message: 'bcryptjs working correctly',
-//       hash: hashedPassword
-//     });
-//   } catch (error) {
-//     console.error('bcrypt test error:', error);
-//     res.status(500).json({
-//       success: false,
-//       error: error.message
-//     });
-//   }
-// });
+
 //['Admin', 'User', 'Manager']
 app.use("/user", userRoutes)
 app.get("/protected", auth(), (req, res) => {
