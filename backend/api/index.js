@@ -2,23 +2,9 @@ const mongoose = require("mongoose")
 const express = require("express")
 const cors = require("cors")
 const userRoutes = require("../Routes/UserRoutes.jsx")
-// const bcrypt = require("bcryptjs"); 
 const auth = require("../auth.jsx")
 require("dotenv").config()
 
-// const getRandomValues = (len) => {
-//   const randomValues = new Uint8Array(len);
-//   for (let i = 0; i < len; i++) {
-//     randomValues[i] = Math.floor(Math.random() * 256);
-//   }
-//   return randomValues;
-// };
-
-// // Set the fallback
-// if (typeof bcrypt.setRandomFallback === 'function') {
-//   bcrypt.setRandomFallback(len => Array.from(getRandomValues(len)));
-//   console.log("Set custom random fallback for bcryptjs");
-// }
 
 
 const app = express()

@@ -1,31 +1,8 @@
 const user = require("../models/User.jsx");
 const activity = require("../models/Activity.jsx")
-// const bcrypt = require("bcryptjs");
-// const crypto = require('crypto');
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 
-// const hashPassword = (password) => {
-//     // Generate a random salt
-//     const salt = crypto.randomBytes(16).toString('hex');
-    
-//     // Hash the password with PBKDF2 - more reliable in serverless
-//     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
-    
-//     // Return salt:hash format for storage
-//     return `${salt}:${hash}`;
-//   };
- 
-//   const verifyPassword = (password, storedPassword) => {
-//     // Split the stored password into salt and hash
-//     const [salt, hash] = storedPassword.split(':');
-    
-//     // Hash the input password with the same salt
-//     const calculatedHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
-    
-//     // Compare the calculated hash with the stored hash
-//     return calculatedHash === hash;
-//   };
 
 // Register a new user
 // const register = async(request,response)=>{

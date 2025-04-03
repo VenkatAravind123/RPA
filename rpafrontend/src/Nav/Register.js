@@ -86,6 +86,7 @@ const RegisterForm = () => {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status
+        
       });
       
       // Better error message extraction
