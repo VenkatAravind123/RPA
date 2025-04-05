@@ -70,7 +70,7 @@ const team = [
   
   {
     name: "Thota Arshitha",
-    role: "Member",
+    role: "Core Member",
     bio: "Thota Arshitha is passionate about contributing to the junior core team's success and growth.",
     image: Thotaarshita,
     social: {
@@ -103,7 +103,7 @@ const team = [
   },
   {
     name: "Manaswini",
-    role: "Member",
+    role: "Core Member",
     bio: "Manaswini is a dedicated and enthusiastic member of the junior core team, always ready to lend a helping hand.",
     image: MANASWINI,
     social: {
@@ -114,7 +114,7 @@ const team = [
   },
   {
     name: "Kavya Sri",
-    role: "Member",
+    role: "Core Member",
     bio: "Kavya Sri is passionate about contributing her skills and creativity to the junior core team's projects.",
     image: kavya,
     social: {
@@ -125,7 +125,7 @@ const team = [
   },
   {
     name: "Triveni",
-    role: "Member",
+    role: "Core Member",
     bio: "Triveni is a dedicated and detail-oriented member of the junior core team, contributing effectively to project success.",
     image: Triveni,
     social: {
@@ -136,7 +136,7 @@ const team = [
   },
   {
     name: "Sai Lakshmi Saroja Devi",
-    role: "Member",
+    role: "Core Member",
     bio: "Sai Lakshmi Saroja Devi is committed to contributing her skills and expertise to the junior core team's projects.",
     image: SaiLakshmi,
     social: {
@@ -169,7 +169,7 @@ const team = [
   },
   {
     name: "Durga Harshitha",
-    role: "Member",
+    role: "Core Member",
     bio: "Durga Harshitha is a motivated member of the junior core team, striving for excellence in project execution.",
     image: HARSHITHA,
     social: {
@@ -202,7 +202,7 @@ const team = [
   },
   {
     name: "Dheeraj",
-    role: "Member",
+    role: "Core Member",
     bio: "Sai Dheeraj is a committed member of the junior core team, dedicated to achieving project goals.",
     image: saidheeraj,
     social: {
@@ -214,7 +214,7 @@ const team = [
   
   {
     name: "Hanisha",
-    role: "Member",
+    role: "Core Member",
     bio: "Hanisha is a proactive member of the junior core team, always eager to learn and contribute.",
     image: Hanisha,
     social: {
@@ -236,7 +236,7 @@ const team = [
   },
   {
     name: "Sailaja",
-    role: "Member",
+    role: "Core Member",
     bio: "Sailaja is a passionate member of the junior core team, dedicated to achieving project goals.",
     image: SailajaTata,
     social: {
@@ -247,7 +247,7 @@ const team = [
   },
   {
     name: "Tanuja",
-    role: "Member",
+    role: "Core Member",
     bio: "Tanuja is a dedicated member of the junior core team, striving for excellence in project execution.",
     image: TANUJA,
     social: {
@@ -258,7 +258,7 @@ const team = [
   },
   {
     name: "Jayasri",
-    role: "Member",
+    role: "Core Member",
     bio: "Jayasri is a proactive member of the junior core team, always eager to learn and contribute.",
     image: jayasri,
     social: {
